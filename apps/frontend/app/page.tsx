@@ -158,7 +158,7 @@ export default function Home() {
                                 {['Live', 'Sports', 'Esports', 'Casino'].map((item, i) => (
                                     <Link
                                         key={item}
-                                        href={`/${item.toLowerCase()}`}
+                                        href={item === 'Live' ? '/' : `/${item.toLowerCase()}`}
                                         className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${i === 0
                                             ? 'text-white'
                                             : 'text-purple-400 hover:text-purple-600 hover:bg-purple-100'
