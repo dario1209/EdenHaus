@@ -1,5 +1,5 @@
 {
-    "name": "sportsbook-monorepo",
+    "name": "sportsbook_monorepo",
     "private": true,
     "version": "1.0.0",
     "scripts": {
@@ -24,5 +24,9 @@
         "apps/*",
         "packages/*"
     ],
-    "packageManager": "npm@10.2.3"
+    "packageManager": "npm@10.2.3",
+    "overrides": {
+        "js-yaml": "^4.1.1",
+        "tmp": "^0.2.4"
+    }
 }
