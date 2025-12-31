@@ -1,5 +1,3 @@
-'use client'
-
 export default async function Markets({ params }: { params: Promise<{ sport: string }> }) {
     const { sport } = await params
     return (

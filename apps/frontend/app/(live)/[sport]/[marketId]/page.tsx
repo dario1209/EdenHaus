@@ -1,5 +1,3 @@
-'use client'
-
 import { useParams } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { BetSlip } from '../../../components/bet-ui/BetSlip'

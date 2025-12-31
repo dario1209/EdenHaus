@@ -1,5 +1,3 @@
-'use client'
-
 import { ConnectButton } from './ConnectButton'
 
 export function WalletConnect() {
