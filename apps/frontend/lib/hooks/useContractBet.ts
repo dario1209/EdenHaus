@@ -68,6 +68,11 @@ interface LogContext {
 	error?: string;
 	stage?: string;
 	duration?: number;
+	status?: string;
+	confirmations?: number;
+	betId?: string;
+	attempt?: number;
+	maxRetries?: number;
 }
 
 function logInfo(message: string, context: Partial<LogContext>) {
