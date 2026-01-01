@@ -1,5 +1,3 @@
-import { defineConfig } from '@prisma/client';
-
-export default defineConfig({
+export default {
   schema: 'lib/db/prisma/schema.prisma',
-});
+};
