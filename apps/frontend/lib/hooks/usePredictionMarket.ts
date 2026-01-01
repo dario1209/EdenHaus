@@ -26,8 +26,8 @@ import {
 	CACHE,
 	BET_LIMITS,
 	CURRENT_NETWORK,
-	getTxExplorerUrl,
 } from "@/lib/config/constants";
+import { getTxExplorerUrl } from "@/lib/blockchain/viem-client";
 
 // ============================================================================
 // TYPES
@@ -122,6 +122,7 @@ interface LogContext {
 	source?: "api" | "cache" | "sse" | "poll";
 	duration?: number;
 	error?: string;
+	errorCode?: string;
 	cacheHit?: boolean;
 }
 
