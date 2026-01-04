@@ -91,8 +91,8 @@ export default function EsportsPage() {
     const [selectedEsport, setSelectedEsport] = useState('CS2')
     const [betSlip, setBetSlip] = useState<{ match: string; selection: string; odds: number }[]>([])
     const [currentTime, setCurrentTime] = useState('')
-    const [viewerCount, setViewerCount] = useState(247892)
     const [currentDate, setCurrentDate] = useState('')
+    const [viewerCount, setViewerCount] = useState(247892)
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -233,7 +233,10 @@ export default function EsportsPage() {
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className="hidden sm:block text-xs font-mono text-white/90">{currentTime}</span>
+                            <div className="hidden sm:flex flex-col items-end gap-0.5">
+                                <span className="text-xs font-mono text-white/90">{currentTime}</span>
+                                <span className="text-[10px] font-mono text-white/70">{currentDate}</span>
+                            </div>
                             <div className="flex gap-1.5">
                                 <button className="w-4 h-4 rounded-sm bg-yellow-300 hover:bg-yellow-400 transition-colors flex items-center justify-center text-[10px] font-bold text-yellow-800">−</button>
                                 <button className="w-4 h-4 rounded-sm bg-green-300 hover:bg-green-400 transition-colors flex items-center justify-center text-[10px] font-bold text-green-800">□</button>
