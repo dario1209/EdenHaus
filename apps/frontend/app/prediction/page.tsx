@@ -13,7 +13,6 @@
 
 import type { Route } from 'next';
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // ============================================================================
@@ -210,7 +209,6 @@ const Scoreboard = ({ data }: { data: ScoreboardData }) => (
 // ============================================================================
 
 export default function PredictionPage() {
-    const pathname = usePathname()
     const [currentTime, setCurrentTime] = useState('')
     const [currentDate, setCurrentDate] = useState('')
     const [scoreboardTime, setScoreboardTime] = useState(SCOREBOARD.time);
@@ -296,98 +294,166 @@ export default function PredictionPage() {
                 <div className="absolute bottom-[40%] right-[5%] text-2xl opacity-35 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>🎯</div>
             </div>
 
-            {/* Windows 95 Style Taskbar */}
-            <div
-                className="fixed top-0 left-0 right-0 z-50 h-14"
-                style={{
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(248,232,248,0.95) 100%)',
-                    borderBottom: '3px solid #D8BFD8',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                }}
-            >
-                <div className="h-full px-4 flex items-center justify-between max-w-[1800px] mx-auto">
-                    {/* Left - Logo */}
-                    <div className="flex items-center gap-3">
-                        <div
-                            className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
-                            style={{
-                                background: 'linear-gradient(135deg, #957DAD 0%, #6B4C7A 100%)',
-                                boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
-                            }}
-                        >
-                            🔮
+            {/* Main Desktop Window */}
+            <div className="relative z-10 mx-4 mt-4">
+                {/* Window Frame */}
+                <div
+                    className="rounded-xl overflow-hidden"
+                    style={{
+                        background: 'linear-gradient(180deg, #E6E6FA 0%, #DDA0DD 100%)',
+                        border: '3px solid #D8BFD8',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,0.5)'
+                    }}
+                >
+                    {/* Window Title Bar */}
+                    <div
+                        className="flex items-center justify-between px-4 py-2"
+                        style={{
+                            background: 'linear-gradient(90deg, #957DAD 0%, #7EC8E3 25%, #98D8C8 50%, #7EC8E3 75%, #957DAD 100%)',
+                            borderBottom: '2px solid rgba(255,255,255,0.3)'
+                        }}
+                    >
+                        <div className="flex items-center gap-3">
+                            <span className="text-sm font-black text-white tracking-widest drop-shadow-md">
+                                PREDICTION.EXE
+                            </span>
+                            <div
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
+                                style={{
+                                    background: 'linear-gradient(135deg, #957DAD, #6B4C7A)',
+                                    color: 'white',
+                                    boxShadow: '0 2px 8px rgba(149, 125, 173, 0.4)'
+                                }}
+                            >
+                                <span className="w-2 h-2 bg-white rounded-full animate-ping" />
+                                {MARKETS.length} MARKETS
+                            </div>
                         </div>
-                        <span
-                            className="text-xl font-black tracking-tight"
-                            style={{
-                                background: 'linear-gradient(135deg, #957DAD, #6B4C7A)',
-                                backgroundClip: 'text',
-                                WebkitBackgroundClip: 'text',
-                                color: 'transparent'
-                            }}
-                        >
-                            MicroBets
-                        </span>
+                        <div className="flex items-center gap-4">
+                            <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-white/90">
+                                <span>{currentDate}</span>
+                                <span className="text-white/60">|</span>
+                                <span>{currentTime}</span>
+                            </div>
+                            <div className="flex gap-1.5">
+                                <button className="w-4 h-4 rounded-sm bg-yellow-300 hover:bg-yellow-400 transition-colors flex items-center justify-center text-[10px] font-bold text-yellow-800">−</button>
+                                <button className="w-4 h-4 rounded-sm bg-green-300 hover:bg-green-400 transition-colors flex items-center justify-center text-[10px] font-bold text-green-800">□</button>
+                                <button className="w-4 h-4 rounded-sm bg-pink-300 hover:bg-pink-400 transition-colors flex items-center justify-center text-[10px] font-bold text-pink-800">×</button>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Center - Navigation */}
-                    <nav className="hidden md:flex items-center gap-1">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.path}
-                                className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${pathname === item.path
-                                        ? 'text-white'
-                                        : 'hover:scale-105'
-                                    }`}
-                                style={
-                                    pathname === item.path
-                                        ? {
-                                            background: 'linear-gradient(135deg, #957DAD 0%, #6B4C7A 100%)',
-                                            boxShadow: '0 4px 15px rgba(149, 125, 173, 0.3)'
-                                        }
-                                        : { color: '#6B4C7A' }
-                                }
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
-                    </nav>
+                    {/* Menu Bar */}
+                    <div
+                        className="flex items-center gap-6 px-4 py-1.5 text-xs font-medium"
+                        style={{
+                            background: 'rgba(255,255,255,0.85)',
+                            borderBottom: '1px solid rgba(186, 85, 211, 0.2)',
+                            color: '#6B4C7A'
+                        }}
+                    >
+                        <span className="hover:text-pink-500 cursor-pointer transition-colors">File</span>
+                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Edit</span>
+                        <span className="hover:text-pink-500 cursor-pointer transition-colors">View</span>
+                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Markets</span>
+                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Wallet</span>
+                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Help</span>
+                    </div>
 
-                    {/* Right - Time, Date & Connect Wallet */}
-                    <div className="flex items-center gap-4">
-                        <div className="hidden sm:flex flex-col items-end">
-                            <span className="text-sm font-black" style={{ color: '#6B4C7A' }}>
-                                {currentTime}
-                            </span>
-                            <span className="text-xs font-medium" style={{ color: '#957DAD' }}>
-                                {currentDate}
-                            </span>
+                    {/* Main Header Content */}
+                    <div
+                        className="flex items-center justify-between px-4 py-3"
+                        style={{
+                            background: 'rgba(255,255,255,0.9)',
+                            backdropFilter: 'blur(10px)'
+                        }}
+                    >
+                        <div className="flex items-center gap-8">
+                            {/* Logo */}
+                            <Link href={'/' as Route} className="flex items-center gap-3 group">
+                                <div
+                                    className="w-11 h-11 rounded-xl flex items-center justify-center text-xl font-black text-white transition-all group-hover:scale-110 group-hover:rotate-3"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 50%, #98D8C8 100%)',
+                                        boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4), inset 0 2px 0 rgba(255,255,255,0.3)'
+                                    }}
+                                >
+                                    μ
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-xl font-black tracking-tight leading-none">
+                                        <span style={{ color: '#957DAD' }}>MICRO</span>
+                                        <span style={{ color: '#7EC8E3' }}>BETS</span>
+                                    </span>
+                                    <span className="text-[10px] font-bold tracking-widest" style={{ color: '#98D8C8' }}>
+                                        🔮 PREDICTIONS 🔮
+                                    </span>
+                                </div>
+                            </Link>
+
+                            {/* Navigation */}
+                            <nav className="hidden md:flex items-center gap-1">
+                                {navItems.map((item) => {
+                                    const isPrediction = item.name === 'Prediction'
+
+                                    return (
+                                        <Link
+                                            key={item.name}
+                                            href={item.path}
+                                            className={`
+                                                px-4 py-2 rounded-full text-sm font-bold transition-all duration-300
+                                                ${isPrediction
+                                                    ? 'text-white scale-105'
+                                                    : 'hover:scale-105'
+                                                }
+                                            `}
+                                            style={isPrediction ? {
+                                                background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 50%, #98D8C8 100%)',
+                                                boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
+                                            } : {
+                                                color: '#957DAD',
+                                                background: 'transparent'
+                                            }}
+                                        >
+                                            {isPrediction && (
+                                                <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />
+                                            )}
+                                            {item.name}
+                                        </Link>
+                                    )
+                                })}
+                            </nav>
                         </div>
-                        <button
-                            className="px-4 py-2 rounded-xl text-sm font-bold text-white transition-all hover:scale-105"
-                            style={{
-                                background: 'linear-gradient(135deg, #7EC8E3 0%, #5BA4C9 100%)',
-                                boxShadow: '0 4px 15px rgba(126, 200, 227, 0.4)'
-                            }}
-                        >
-                            Connect Wallet
-                        </button>
+
+                        {/* Right side */}
+                        <div className="flex items-center gap-3">
+                            <button
+                                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105"
+                                style={{
+                                    background: 'linear-gradient(135deg, rgba(149,125,173,0.2), rgba(126,200,227,0.2))',
+                                    border: '2px solid rgba(149, 125, 173, 0.3)',
+                                    color: '#957DAD'
+                                }}
+                            >
+                                <span>🔍</span>
+                                <span>Search</span>
+                            </button>
+                            <button
+                                className="px-5 py-2.5 rounded-full text-sm font-black text-white transition-all hover:scale-105"
+                                style={{
+                                    background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 100%)',
+                                    boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
+                                }}
+                            >
+                                🔮 Connect Wallet
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="relative z-10 pt-20 pb-12 px-4 max-w-7xl mx-auto">
-                {/* Navigation Breadcrumb */}
-                <nav className="flex items-center gap-2 text-sm mb-6">
-                    <Link href="/" className="text-[#957DAD] hover:text-[#6B4C7A] transition-colors">
-                        Home
-                    </Link>
-                    <span className="text-[#E0BBE4]">›</span>
-                    <span className="text-[#6B4C7A] font-medium">Prediction Markets</span>
-                </nav>
-
+            <div className="relative z-10 px-4 pb-4 mt-4 max-w-7xl mx-auto">
                 {/* Hero Header */}
                 <div
                     className="rounded-xl overflow-hidden mb-8"
