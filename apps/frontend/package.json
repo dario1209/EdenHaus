@@ -38,8 +38,8 @@
     },
     "devDependencies": {
         "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
         "eslint": "^9",
         "eslint-config-next": "^15.1.0",
         "prisma": "^6.1.0",
@@ -49,6 +49,8 @@
         "node-domexception": "^2.0.0",
         "@walletconnect/logger": {
             "pino": "10.0.0"
-        }
+        },
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0"
     }
 }
