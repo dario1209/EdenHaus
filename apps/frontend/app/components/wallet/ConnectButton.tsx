@@ -7,6 +7,12 @@ export function ConnectButton() {
     const { connect, connectors } = useConnect()
     const { disconnect } = useDisconnect()
 
+    // Filter ONLY WalletConnect connectors
+    const wcConnectors = connectors.filter(c =>
+        c.name.toLowerCase().includes('walletconnect') ||
+        c.id.includes('walletConnect')
+    )
+
     if (isConnected) {
         return (
             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
@@ -29,15 +35,13 @@ export function ConnectButton() {
 
     return (
         <div className="flex gap-2">
-            {connectors.map((connector) => (
+            {wcConnectors.map((connector) => (
                 <button
                     key={connector.uid}
                     onClick={() => connect({ connector })}
                     className="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full border border-white/20 text-white font-medium transition-all flex items-center gap-2 text-sm"
                 >
-                    {connector.name === 'MetaMask' && '🦊'}
-                    {connector.name === 'WalletConnect' && '📱'}
-                    {connector.name}
+                    📱 WalletConnect
                 </button>
             ))}
         </div>

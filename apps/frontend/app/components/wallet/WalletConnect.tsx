@@ -7,6 +7,11 @@ export function WalletConnect() {
     const { connect, connectors } = useConnect()
     const { disconnect } = useDisconnect()
 
+    const wcConnectors = connectors.filter(c =>
+        c.name.toLowerCase().includes('walletconnect') ||
+        c.id.includes('walletConnect')
+    )
+
     if (isConnected)
         return (
             <button
@@ -19,13 +24,13 @@ export function WalletConnect() {
 
     return (
         <div className="flex gap-2">
-            {connectors.map((connector) => (
+            {wcConnectors.map((connector) => (
                 <button
                     key={connector.uid}
                     onClick={() => connect({ connector })}
                     className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
                 >
-                    {connector.name}
+                    📱 WalletConnect
                 </button>
             ))}
         </div>
