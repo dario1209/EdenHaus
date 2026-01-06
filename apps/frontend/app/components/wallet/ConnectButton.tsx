@@ -1,18 +1,13 @@
 'use client'
-
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react'
+import { useDisconnect } from 'wagmi'; // Keep wagmi for address/disconnect
 
 export function ConnectButton() {
-    const { address, isConnected } = useAccount()
-    const { connect, connectors } = useConnect()
+    const { address, isConnected } = useAppKitAccount() // Replaces wagmi account
+    const { open } = useAppKit()
     const { disconnect } = useDisconnect()
 
-    // Filter ONLY WalletConnect connectors
-    const wcConnectors = connectors.filter(c =>
-        c.name.toLowerCase().includes('walletconnect') ||
-        c.id.includes('walletConnect')
-    )
-
+    // Your exact same UI code...
     if (isConnected) {
         return (
             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
@@ -22,11 +17,7 @@ export function ConnectButton() {
                 <span className="text-white font-medium max-w-[120px] truncate">
                     {address?.slice(0, 6)}...{address?.slice(-4)}
                 </span>
-                <button
-                    onClick={() => disconnect()}
-                    className="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded-full flex items-center justify-center transition-all text-white"
-                    title="Disconnect"
-                >
+                <button onClick={() => disconnect()} className="w-8 h-8 bg-red-500/20 hover:bg-red-500/30 rounded-full flex items-center justify-center transition-all text-white">
                     ✕
                 </button>
             </div>
@@ -34,16 +25,11 @@ export function ConnectButton() {
     }
 
     return (
-        <div className="flex gap-2">
-            {wcConnectors.map((connector) => (
-                <button
-                    key={connector.uid}
-                    onClick={() => connect({ connector })}
-                    className="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full border border-white/20 text-white font-medium transition-all flex items-center gap-2 text-sm"
-                >
-                    📱 WalletConnect
-                </button>
-            ))}
-        </div>
+        <button
+            onClick={() => open()}
+            className="px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full border border-white/20 text-white font-medium transition-all flex items-center gap-2 text-sm"
+        >
+            📱 WalletConnect
+        </button>
     )
 }

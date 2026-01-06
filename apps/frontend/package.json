@@ -45,6 +45,9 @@
         "typescript": "^5.5.3"
     },
     "overrides": {
-        "node-domexception": "^2.0.0"
+        "node-domexception": "^2.0.0",
+        "@walletconnect/logger": {
+            "pino": "10.0.0"
+        }
     }
 }

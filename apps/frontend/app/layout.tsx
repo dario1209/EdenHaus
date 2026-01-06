@@ -1,7 +1,12 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 import { Orbitron, Space_Grotesk } from 'next/font/google'
+import { WagmiProvider } from 'wagmi'
+import { config } from '../wagmi.config'; // Create this file
 import './globals.css'
 import { Providers } from './providers'
+
+const queryClient = new QueryClient()
 
 const spaceGrotesk = Space_Grotesk({
     subsets: ['latin'],
@@ -26,9 +31,13 @@ export default function RootLayout({
     return (
         <html lang="en" className={`${spaceGrotesk.variable} ${orbitron.variable}`}>
             <body className="font-sans antialiased">
-                <Providers>
-                    {children}
-                </Providers>
+                <WagmiProvider config={config}>
+                    <QueryClientProvider client={queryClient}>
+                        <Providers>
+                            {children}
+                        </Providers>
+                    </QueryClientProvider>
+                </WagmiProvider>
             </body>
         </html>
     )
