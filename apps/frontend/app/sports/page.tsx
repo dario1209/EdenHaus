@@ -175,7 +175,7 @@ uppercase tracking-[0.28em] border border-[#B08D57]/45 bg-[#0A0E0C]/30 text-[#D8
                                     </span>
                                 </div>
                                 <div className="mt-1 text-[11px] tracking-[0.34em] uppercase text-[#D8CFC0]/55 group-hover:text-[#C2A14D]/85 transition-colors">
-                                    Live Lines • Quiet Confidence • Brass & Smoke
+                                    Quiet Confidence • Reliable Odds
                                 </div>
                             </Link>
 
