@@ -269,7 +269,7 @@ transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]
                                 </nav>
 
                                 <p className="mt-6 text-center text-[11px] tracking-[0.30em] uppercase text-[#B08D57]/60">
-                                    Est. 2024 • By invitation
+                                    Est. 2026 • By invitation
                                 </p>
                             </div>
                         </div>

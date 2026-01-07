@@ -250,7 +250,7 @@ export default function EsportsPage() {
                                 <div className="eh-card__pad">
                                     <div className="eh-miniTitle">Spotlight</div>
                                     <div className="eh-spot">
-                                        <div className="eh-spot__k">THE INTERNATIONAL 2024</div>
+                                        <div className="eh-spot__k">THE INTERNATIONAL 2026</div>
                                         <div className="eh-spot__teams">
                                             <div className="eh-spot__team">
                                                 <div className="eh-spot__icon">🐉</div>
