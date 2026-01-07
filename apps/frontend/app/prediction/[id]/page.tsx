@@ -746,13 +746,13 @@ export default function PredictionMarketPage() {
         }
 
         .eh-bg__grad {
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(ellipse at 20% 20%, rgba(194, 161, 77, 0.22) 0%, transparent 55%),
-            radial-gradient(ellipse at 70% 70%, rgba(15, 92, 74, 0.24) 0%, transparent 60%),
-            linear-gradient(180deg, rgba(243, 235, 221, 1) 0%, rgba(216, 207, 192, 1) 58%, rgba(243, 235, 221, 1) 100%);
-        }
+		position: absolute;
+		inset: 0;
+		background:
+			radial-gradient(ellipse at 18% 22%, rgba(194, 161, 77, 0.18) 0%, transparent 55%),
+			radial-gradient(ellipse at 78% 70%, rgba(15, 92, 74, 0.22) 0%, transparent 60%),
+			linear-gradient(180deg, rgba(10, 14, 12, 1) 0%, rgba(31, 61, 43, 1) 42%, rgba(10, 14, 12, 1) 100%);
+		}
 
         .eh-bg__grid {
           position: absolute;
@@ -959,12 +959,13 @@ export default function PredictionMarketPage() {
         }
 
         .eh-card {
-          background: rgba(243, 235, 221, 0.84);
-          border: 1px solid rgba(31, 61, 43, 0.16);
-          border-radius: 18px;
-          box-shadow: 0 18px 50px rgba(0, 0, 0, 0.12);
-          overflow: hidden;
-        }
+		background: rgba(10, 14, 12, 0.28);
+		border: 1px solid rgba(176, 141, 87, 0.22);
+		border-radius: 18px;
+		box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+		backdrop-filter: blur(14px);
+		overflow: hidden;
+		}
 
         .eh-card__pad {
           padding: 18px;
