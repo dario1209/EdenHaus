@@ -1,22 +1,23 @@
-import type { Metadata } from 'next'
-import { Orbitron, Space_Grotesk } from 'next/font/google'
-import './globals.css'
-import { Providers } from './providers'
+import type { Metadata } from "next"
+import { Cormorant_Garamond, Space_Grotesk } from "next/font/google"
+import "./globals.css"
+import { Providers } from "./providers"
 
 const spaceGrotesk = Space_Grotesk({
-    subsets: ['latin'],
-    variable: '--font-space-grotesk',
+    subsets: ["latin"],
+    variable: "--font-space-grotesk",
 })
 
-const orbitron = Orbitron({
-    subsets: ['latin'],
-    variable: '--font-orbitron',
+const cormorantGaramond = Cormorant_Garamond({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-cormorant-garamond",
 })
 
 export const metadata: Metadata = {
-    title: 'Edge Haus - Live Sports Betting',
+    title: "Eden Haus — Members Only",
     description:
-        'x402 payments + Chainlink settlement on Cronos. Bet on every point, kill, corner. Real-time, on-chain, sub-second.',
+        "A discreet room for those who read the game fast and wager with composure. Slip inside for the prediction market.",
 }
 
 export default function RootLayout({
@@ -25,7 +26,10 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="en" className={`${spaceGrotesk.variable} ${orbitron.variable}`}>
+        <html
+            lang="en"
+            className={`${spaceGrotesk.variable} ${cormorantGaramond.variable}`}
+        >
             <body className="font-sans antialiased">
                 <Providers>{children}</Providers>
             </body>

@@ -1,9 +1,8 @@
 "use client"
 
-import type { Route } from 'next'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useMemo, useState } from "react"
 
 export default function Home() {
     const router = useRouter()
@@ -12,201 +11,284 @@ export default function Home() {
     const [doorShaking, setDoorShaking] = useState(false)
     const [smokeEffect, setSmokeEffect] = useState(false)
 
-    // Secret knock pattern: 3 knocks
     const secretPattern = [1, 1, 1]
+
+    const knockText = useMemo(() => {
+        if (knockSequence.length > 0 && knockSequence.length < 3) {
+            const remaining = 3 - knockSequence.length
+            return `Knock ${remaining} more time${remaining > 1 ? "s" : ""}...`
+        }
+        return "Those who know, knock thrice..."
+    }, [knockSequence])
 
     const handleKnock = () => {
         const newSequence = [...knockSequence, 1]
         setKnockSequence(newSequence)
         setDoorShaking(true)
-
         setTimeout(() => setDoorShaking(false), 200)
 
-        // Check if pattern matches after 3 knocks
         if (newSequence.length === 3) {
             if (JSON.stringify(newSequence) === JSON.stringify(secretPattern)) {
                 setIsAuthenticated(true)
                 setSmokeEffect(true)
-                setTimeout(() => {
-                    router.push('/casino' as Route)
-                }, 2000)
+                setTimeout(() => router.push("/predictions"), 1200)
             } else {
-                // Wrong pattern - reset
                 setTimeout(() => setKnockSequence([]), 1000)
             }
         }
     }
 
-    const handleEnter = () => {
+    const handleSlipInside = () => {
         setSmokeEffect(true)
-        setTimeout(() => {
-            router.push('/casino' as Route)
-        }, 1500)
+        setTimeout(() => router.push("/predictions"), 800)
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
-            {/* Ambient smoke effect */}
-            {smokeEffect && (
-                <div className="absolute inset-0 bg-gradient-radial from-transparent via-[#5F6F52]/20 to-[#1F3D2B]/40 animate-pulse z-50 pointer-events-none" />
-            )}
+        <main className="relative min-h-screen overflow-hidden">
+            {/* Base atmosphere */}
+            <div className="absolute inset-0 bg-[#1F3D2B]" />
+            <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_35%,rgba(243,235,221,0.10),rgba(31,61,43,0.65),rgba(10,14,12,0.92))]" />
 
-            {/* Vintage wallpaper texture overlay */}
-            <div className="absolute inset-0 opacity-10 grid-bg" />
+            {/* Subtle wallpaper + deco geometry */}
+            <div className="absolute inset-0 opacity-[0.10] mix-blend-soft-light wallpaper" />
+            <div className="absolute inset-0 opacity-[0.12] deco-lines" />
 
-            {/* Main content */}
-            <div className="relative z-10 flex flex-col items-center space-y-12 px-6">
+            {/* Smoke overlay (gentle drift, not pulse) */}
+            {smokeEffect && <div className="absolute inset-0 z-50 pointer-events-none smoke" />}
 
-                {/* Building illustration with interactive door */}
-                <div className="relative group">
-                    <div
-                        className={`window-card p-8 transition-all duration-300 ${doorShaking ? 'animate-shake' : ''
-                            } ${isAuthenticated ? 'glow-gold' : 'glow-emerald'}`}
-                        style={{
-                            background: 'linear-gradient(135deg, rgba(107, 74, 50, 0.9) 0%, rgba(74, 44, 29, 0.95) 100%)',
-                            borderColor: isAuthenticated ? '#C2A14D' : '#6B4A32'
-                        }}
-                    >
-                        {/* Building SVG - same as your current design */}
-                        <svg
-                            width="200"
-                            height="200"
-                            viewBox="0 0 200 200"
-                            className="drop-shadow-2xl"
-                            onClick={handleKnock}
-                        >
-                            {/* Building outline */}
-                            <rect x="40" y="30" width="120" height="150"
-                                fill="none"
-                                stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
-                                strokeWidth="2.5"
-                                className="transition-all duration-500" />
-
-                            {/* Windows - Top floor */}
-                            <rect x="50" y="45" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="70" y="45" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="90" y="45" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="110" y="45" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="130" y="45" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-
-                            {/* Windows - Middle floor */}
-                            <rect x="50" y="75" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="70" y="75" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="90" y="75" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="110" y="75" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-                            <rect x="130" y="75" width="15" height="20" fill="none" stroke="#D8CFC0" strokeWidth="1.5" />
-
-                            {/* Door - Interactive */}
-                            <rect x="80" y="120" width="40" height="55"
-                                fill={isAuthenticated ? "#C2A14D" : "#4A2C1D"}
-                                stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
-                                strokeWidth="2"
-                                className="cursor-pointer hover:brightness-110 transition-all duration-300" />
-
-                            {/* Door arch */}
-                            <path d="M 80 120 Q 100 110 120 120"
-                                fill="none"
-                                stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
-                                strokeWidth="2" />
-
-                            {/* Door knob */}
-                            <circle cx="110" cy="150" r="3"
-                                fill={isAuthenticated ? "#F3EBDD" : "#B08D57"}
-                                className="cursor-pointer hover:scale-125 transition-transform" />
-
-                            {/* Speakeasy peephole */}
-                            <rect x="95" y="135" width="10" height="6"
-                                fill="#1F3D2B"
-                                stroke={isAuthenticated ? "#C2A14D" : "#6B4A32"}
-                                strokeWidth="1" />
-
-                            {/* Corner brackets */}
-                            <path d="M 45 35 L 45 45 M 45 35 L 55 35" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" />
-                            <path d="M 155 35 L 155 45 M 155 35 L 145 35" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" />
-                            <path d="M 45 175 L 45 165 M 45 175 L 55 175" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" />
-                            <path d="M 155 175 L 155 165 M 155 175 L 145 175" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" />
-                        </svg>
-
-                        {/* Knock indicator dots */}
-                        <div className="flex justify-center gap-2 mt-4">
-                            {[0, 1, 2].map((i) => (
-                                <div
-                                    key={i}
-                                    className={`w-3 h-3 rounded-full transition-all duration-300 ${knockSequence[i]
-                                            ? 'bg-[#C2A14D] shadow-lg shadow-[#C2A14D]/50'
-                                            : 'bg-[#6B4A32]/30'
-                                        }`}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Establishment name */}
-                <div className="text-center space-y-3">
-                    <h1 className="text-6xl md:text-7xl font-serif text-[#D8CFC0] tracking-wider drop-shadow-lg">
-                        Bistro402
-                    </h1>
-                    <p className="text-sm text-[#B08D57] tracking-[0.3em] uppercase font-light">
-                        In House Bets
-                    </p>
-                </div>
-
-                {/* Mysterious description */}
-                <p className="text-center text-[#D8CFC0]/80 max-w-md text-sm leading-relaxed font-light">
-                    An exclusive establishment for distinguished members seeking refined sports wagering
-                    in an atmosphere of sophistication
-                </p>
-
-                {/* Enter button */}
-                <button
-                    onClick={handleEnter}
-                    className="btn-gold px-12 py-4 text-lg tracking-wider uppercase font-semibold hover:tracking-widest transition-all duration-300 shadow-2xl"
-                >
-                    Enter the House
-                </button>
-
-                {/* Secret hint (subtle) */}
-                <p className="text-[#6B4A32]/40 text-xs italic">
-                    {knockSequence.length > 0 && knockSequence.length < 3
-                        ? `Knock ${3 - knockSequence.length} more time${3 - knockSequence.length > 1 ? 's' : ''}...`
-                        : 'Those who know, knock thrice...'}
-                </p>
-
-                {/* Footer */}
-                <div className="absolute bottom-8 left-0 right-0">
-                    <div className="text-center space-y-4">
-                        <p className="text-[#B08D57]/60 text-xs tracking-widest uppercase">
-                            Est. 2024 • Members Only
+            {/* Content */}
+            <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-16">
+                <div className="w-full max-w-[720px]">
+                    {/* Top microline */}
+                    <div className="text-center">
+                        <p className="text-[11px] tracking-[0.35em] uppercase text-[#B08D57]/80">
+                            Eden Haus • Members Only
                         </p>
+                    </div>
 
-                        <div className="flex justify-center gap-8 text-[#D8CFC0]/60 text-xs">
-                            <Link href="/terms" className="hover:text-[#C2A14D] transition-colors">
-                                Terms & Conditions
-                            </Link>
-                            <span className="text-[#6B4A32]">•</span>
-                            <Link href="/responsible-gaming" className="hover:text-[#C2A14D] transition-colors">
-                                Responsible Gaming
-                            </Link>
-                            <span className="text-[#6B4A32]">•</span>
-                            <Link href="/contact" className="hover:text-[#C2A14D] transition-colors">
-                                Contact
-                            </Link>
+                    {/* Plaque */}
+                    <div
+                        className={[
+                            "mt-8 rounded-3xl p-10 md:p-14",
+                            "backdrop-blur-md",
+                            "shadow-[0_40px_120px_rgba(0,0,0,0.55)]",
+                            doorShaking ? "shake" : "",
+                        ].join(" ")}
+                    >
+                        {/* Brass double border */}
+                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-10 md:p-12">
+                            <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/25" />
+
+                            {/* Warm spotlight */}
+                            <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(194,161,77,0.22),rgba(194,161,77,0.00)_70%)] blur-2xl" />
+
+                            {/* Emblem + knock door */}
+                            <div className="mx-auto flex w-full max-w-[340px] flex-col items-center">
+                                <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(10,14,12,0.45),rgba(10,14,12,0.20))] p-6 ring-1 ring-[#B08D57]/25">
+                                    <svg
+                                        width="220"
+                                        height="220"
+                                        viewBox="0 0 200 200"
+                                        className="drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]"
+                                        onClick={handleKnock}
+                                        role="button"
+                                        aria-label="Knock on the door"
+                                    >
+                                        <rect
+                                            x="40"
+                                            y="30"
+                                            width="120"
+                                            height="150"
+                                            fill="none"
+                                            stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
+                                            strokeWidth="2.5"
+                                            className="transition-all duration-500"
+                                        />
+
+                                        {/* windows */}
+                                        {[
+                                            [50, 45],
+                                            [70, 45],
+                                            [90, 45],
+                                            [110, 45],
+                                            [130, 45],
+                                            [50, 75],
+                                            [70, 75],
+                                            [90, 75],
+                                            [110, 75],
+                                            [130, 75],
+                                        ].map(([x, y], i) => (
+                                            <rect
+                                                key={i}
+                                                x={x}
+                                                y={y}
+                                                width="15"
+                                                height="20"
+                                                fill="none"
+                                                stroke="#D8CFC0"
+                                                strokeWidth="1.5"
+                                                opacity="0.85"
+                                            />
+                                        ))}
+
+                                        {/* door */}
+                                        <rect
+                                            x="80"
+                                            y="120"
+                                            width="40"
+                                            height="55"
+                                            fill={isAuthenticated ? "#C2A14D" : "#4A2C1D"}
+                                            stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
+                                            strokeWidth="2"
+                                            className="cursor-pointer hover:brightness-110 transition-all duration-300"
+                                        />
+
+                                        <path
+                                            d="M 80 120 Q 100 110 120 120"
+                                            fill="none"
+                                            stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
+                                            strokeWidth="2"
+                                        />
+
+                                        <circle
+                                            cx="110"
+                                            cy="150"
+                                            r="3"
+                                            fill={isAuthenticated ? "#F3EBDD" : "#B08D57"}
+                                            className="cursor-pointer hover:scale-125 transition-transform"
+                                        />
+
+                                        <rect
+                                            x="95"
+                                            y="135"
+                                            width="10"
+                                            height="6"
+                                            fill="#0A0E0C"
+                                            stroke={isAuthenticated ? "#C2A14D" : "#6B4A32"}
+                                            strokeWidth="1"
+                                        />
+                                    </svg>
+
+                                    <div className="mt-5 flex justify-center gap-2">
+                                        {[0, 1, 2].map((i) => (
+                                            <span
+                                                key={i}
+                                                className={[
+                                                    "h-2.5 w-2.5 rounded-full transition-all duration-300",
+                                                    knockSequence[i]
+                                                        ? "bg-[#C2A14D] shadow-[0_0_20px_rgba(194,161,77,0.55)]"
+                                                        : "bg-[#6B4A32]/35",
+                                                ].join(" ")}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Title */}
+                                <div className="mt-10 text-center">
+                                    <h1 className="font-serif text-5xl md:text-6xl tracking-[0.08em] text-[#F3EBDD]">
+                                        Eden Haus
+                                    </h1>
+                                    <p className="mt-3 text-[11px] tracking-[0.45em] uppercase text-[#B08D57]/90">
+                                        In house bets
+                                    </p>
+
+                                    <div className="mx-auto mt-6 h-px w-36 bg-[#B08D57]/35" />
+
+                                    <p className="mx-auto mt-6 max-w-md text-center text-sm leading-relaxed text-[#D8CFC0]/80">
+                                        A discreet room for those who read the game fast and wager with composure.
+                                        Knock thrice, or slip in quietly.
+                                    </p>
+                                </div>
+
+                                {/* CTA */}
+                                <div className="mt-10 flex flex-col items-center gap-4">
+                                    <button
+                                        onClick={handleSlipInside}
+                                        className="group relative inline-flex items-center justify-center rounded-full px-12 py-4
+                               text-sm uppercase tracking-[0.35em] text-[#F3EBDD]
+                               border border-[#B08D57]/70
+                               bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.06))]
+                               shadow-[0_18px_55px_rgba(0,0,0,0.55)]
+                               transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]"
+                                    >
+                                        <span className="absolute inset-0 rounded-full ring-1 ring-[#C2A14D]/15 group-hover:ring-[#C2A14D]/25" />
+                                        Slip Inside
+                                    </button>
+
+                                    <p className="text-xs italic text-[#D8CFC0]/45">{knockText}</p>
+                                </div>
+                            </div>
+
+                            {/* Bottom links */}
+                            <div className="mt-12 pt-8">
+                                <div className="mx-auto mb-6 h-px w-full max-w-md bg-[#B08D57]/20" />
+
+                                <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
+                                    <Link href="/terms" className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors">
+                                        Terms
+                                    </Link>
+                                    <span className="text-[#B08D57]/40">•</span>
+                                    <Link href="/responsible-gaming" className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors">
+                                        Responsible
+                                    </Link>
+                                    <span className="text-[#B08D57]/40">•</span>
+                                    <Link href="/contact" className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors">
+                                        Contact
+                                    </Link>
+                                </nav>
+
+                                <p className="mt-6 text-center text-[11px] tracking-[0.30em] uppercase text-[#B08D57]/60">
+                                    Est. 2024 • By invitation
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {/* Local CSS for texture/lines/smoke */}
             <style jsx>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
           25% { transform: translateX(-4px); }
           75% { transform: translateX(4px); }
         }
-        .animate-shake {
+        .shake {
           animation: shake 0.2s ease-in-out;
         }
+
+        /* Wallpaper: soft, non-repeating feel */
+        .wallpaper {
+          background-image:
+            radial-gradient(circle at 25% 20%, rgba(194,161,77,0.06), transparent 55%),
+            radial-gradient(circle at 70% 60%, rgba(15,92,74,0.07), transparent 60%),
+            radial-gradient(circle at 40% 85%, rgba(90,31,43,0.05), transparent 60%);
+          filter: blur(0.2px);
+        }
+
+        /* Art-deco linework overlay */
+        .deco-lines {
+          background-image:
+            linear-gradient(to right, rgba(176,141,87,0.22) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(176,141,87,0.14) 1px, transparent 1px);
+          background-size: 120px 120px;
+          mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 72%);
+        }
+
+        /* Smoke drift overlay */
+        .smoke {
+          background:
+            radial-gradient(800px 420px at 30% 35%, rgba(95,111,82,0.20), transparent 60%),
+            radial-gradient(900px 520px at 70% 55%, rgba(216,207,192,0.10), transparent 65%),
+            radial-gradient(1000px 620px at 45% 80%, rgba(95,111,82,0.18), transparent 70%);
+          animation: drift 1.2s ease-out forwards;
+        }
+        @keyframes drift {
+          0% { opacity: 0; transform: translateY(8px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
       `}</style>
-        </div>
+        </main>
     )
 }
