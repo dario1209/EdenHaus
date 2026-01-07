@@ -618,7 +618,7 @@ export default function PredictionPage() {
                             </div>
 
                             <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
-                                {
+                                {(
                                     [
                                         {
                                             step: "1",
@@ -637,18 +637,14 @@ export default function PredictionPage() {
                                         },
                                     ] as const
                                 ).map((s) => (
-                                <div
-                                    key={s.step}
-                                    className="rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/12 p-5"
-                                >
-                                    <div className={subtleLabel}>Step {s.step}</div>
-                                    <div className="mt-2 font-semibold text-[#F3EBDD]">
-                                        {s.title}
+                                    <div
+                                        key={s.step}
+                                        className="rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/12 p-5"
+                                    >
+                                        <div className={subtleLabel}>Step {s.step}</div>
+                                        <div className="mt-2 font-semibold text-[#F3EBDD]">{s.title}</div>
+                                        <div className="mt-2 text-sm text-[#D8CFC0]/60">{s.desc}</div>
                                     </div>
-                                    <div className="mt-2 text-sm text-[#D8CFC0]/60">
-                                        {s.desc}
-                                    </div>
-                                </div>
                                 ))}
                             </div>
                         </div>
