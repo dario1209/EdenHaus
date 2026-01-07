@@ -693,7 +693,9 @@ export default function PredictionMarketPage() {
 										<div className="eh-gate">
 											<div className="eh-gate__k">Connect your wallet to trade</div>
 											<div className="eh-gate__sub">Wallet connection required for buys & sells.</div>
-											<ConnectButton />
+											<div className="flex justify-center">
+												<ConnectButton />
+											</div>
 										</div>
 									) : (
 										<button
