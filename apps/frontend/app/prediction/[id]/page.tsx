@@ -9,6 +9,7 @@
 
 "use client";
 
+import { ConnectButton } from "@/app/components/wallet/ConnectButton";
 import type { Route } from "next";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
@@ -16,8 +17,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
-import { ConnectButton } from "@/components/ConnectButton";
-,
 
 // ============================================================================
 // TYPES
