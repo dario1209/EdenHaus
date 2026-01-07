@@ -1,11 +1,29 @@
+import Link from "next/link"
+
 export default function TermsPage() {
     return (
         <main className="relative min-h-screen overflow-hidden">
             {/* Atmosphere */}
             <div className="absolute inset-0 bg-[#1F3D2B]" />
             <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_35%,rgba(243,235,221,0.10),rgba(31,61,43,0.70),rgba(10,14,12,0.95))]" />
-            <div className="absolute inset-0 pointer-events-none film" />
-            <div className="absolute inset-0 pointer-events-none vignette" />
+
+            {/* Film grain + vignette (hero-only, no styled-jsx) */}
+            <div
+                className="absolute inset-0 pointer-events-none opacity-[0.10] mix-blend-overlay"
+                style={{
+                    backgroundImage:
+                        "repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 2px), repeating-linear-gradient(90deg, rgba(0,0,0,0.035) 0 1px, transparent 1px 3px)",
+                    filter: "blur(0.25px)",
+                }}
+            />
+            <div
+                className="absolute pointer-events-none"
+                style={{
+                    inset: "-20px",
+                    background:
+                        "radial-gradient(1200px 700px at 50% 35%, transparent 35%, rgba(0,0,0,0.35) 70%, rgba(0,0,0,0.65) 100%)",
+                }}
+            />
 
             <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[920px] items-center px-6 py-16">
                 <div className="w-full">
@@ -21,11 +39,7 @@ export default function TermsPage() {
 
                         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-[#D8CFC0]/80">
                             Eden Haus is a discreet room—part lodge, part laboratory—built for those who read the game fast and move
-                            with restraint.
-                            <span className="text-[#D8CFC0]/70">
-                                {" "}
-                                By stepping beyond the door, you consent to the rules below.
-                            </span>
+                            with restraint. By stepping beyond the door, you consent to the rules below.
                         </p>
 
                         <div className="mx-auto mt-8 h-px w-48 bg-[#B08D57]/35" />
@@ -40,61 +54,37 @@ export default function TermsPage() {
                             <div className="pointer-events-none absolute -top-28 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(194,161,77,0.18),rgba(194,161,77,0.00)_70%)] blur-2xl" />
 
                             <div className="space-y-10">
-                                {/* Preamble */}
                                 <section>
-                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        Preamble
-                                    </h2>
+                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Preamble</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        The House is governed by three pillars: composure, discretion, and craft.
-                                        The wager is only the surface; the discipline is the work.
+                                        The House is governed by three pillars: composure, discretion, and craft. The wager is only the
+                                        surface; the discipline is the work.
                                     </p>
                                 </section>
 
-                                {/* Discretion */}
                                 <section>
-                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        Discretion
-                                    </h2>
+                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Discretion</h2>
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        <li>
-                                            Keep the identities, strategies, and conversations of other members private.
-                                        </li>
-                                        <li>
-                                            Do not publish, stream, or otherwise broadcast private rooms, invitations, or internal material.
-                                        </li>
-                                        <li>
-                                            Respect boundaries—some doors are meant to stay closed.
-                                        </li>
+                                        <li>Keep the identities, strategies, and conversations of other members private.</li>
+                                        <li>Do not publish, stream, or broadcast private rooms, invitations, or internal material.</li>
+                                        <li>Respect boundaries—some doors are meant to stay closed.</li>
                                     </ul>
                                 </section>
 
-                                {/* Conduct */}
                                 <section>
-                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        Conduct in the Lodge
-                                    </h2>
+                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Conduct in the Lodge</h2>
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        <li>
-                                            No harassment, threats, doxxing, or coercion.
-                                        </li>
-                                        <li>
-                                            No scams, fraud, or market manipulation efforts coordinated through Eden Haus.
-                                        </li>
-                                        <li>
-                                            Keep discourse sharp and civil; arrogance is noise.
-                                        </li>
+                                        <li>No harassment, threats, doxxing, or coercion.</li>
+                                        <li>No scams, fraud, or coordinated market manipulation efforts through Eden Haus.</li>
+                                        <li>Keep discourse sharp and civil; arrogance is noise.</li>
                                     </ul>
                                 </section>
 
-                                {/* Risk */}
                                 <section>
-                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        Risk & Responsibility
-                                    </h2>
+                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Risk & Responsibility</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        Wagering is risk. Loss is possible. Nothing inside Eden Haus is financial advice.
-                                        Each member is solely responsible for their own decisions and outcomes.
+                                        Wagering is risk. Loss is possible. Nothing inside Eden Haus is financial advice. Each member is
+                                        solely responsible for their own decisions and outcomes.
                                     </p>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/70">
                                         If you are not of legal age in your jurisdiction, or wagering is prohibited where you live, you must
@@ -102,63 +92,49 @@ export default function TermsPage() {
                                     </p>
                                 </section>
 
-                                {/* Access */}
                                 <section>
-                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        Access & Removal
-                                    </h2>
+                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Access & Removal</h2>
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        <li>
-                                            Entry is by invitation, and it can be revoked without notice.
-                                        </li>
-                                        <li>
-                                            The House may limit access, freeze features, or block accounts to protect members and integrity.
-                                        </li>
-                                        <li>
-                                            Attempts to bypass security or probe private systems will result in immediate removal.
-                                        </li>
+                                        <li>Entry is by invitation, and it can be revoked without notice.</li>
+                                        <li>The House may limit access, freeze features, or block accounts to protect members and integrity.</li>
+                                        <li>Attempts to bypass security or probe private systems will result in immediate removal.</li>
                                     </ul>
                                 </section>
 
-                                {/* The mark */}
                                 <section>
-                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        The Mark
-                                    </h2>
+                                    <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">The Mark</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        Symbols here are theatrical by design—an old tradition adapted to a new game.
-                                        They are not claims of affiliation with any real-world order.
+                                        Symbols here are theatrical by design—an old tradition adapted to a new game. They are not claims of
+                                        affiliation with any real-world order.
                                     </p>
                                 </section>
 
-                                {/* Footer actions */}
                                 <section className="pt-2">
                                     <div className="flex flex-col items-center justify-center gap-4 text-center">
                                         <div className="h-px w-full max-w-md bg-[#B08D57]/20" />
-                                        <p className="text-xs italic text-[#D8CFC0]/55">
-                                            “Enter with quiet hands. Leave with a clear ledger.”
-                                        </p>
+                                        <p className="text-xs italic text-[#D8CFC0]/55">“Enter with quiet hands. Leave with a clear ledger.”</p>
 
                                         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                                            <a
+                                            <Link
                                                 href="/"
                                                 className="inline-flex items-center justify-center rounded-full px-6 py-3 text-xs uppercase tracking-[0.30em] text-[#F3EBDD] border border-[#B08D57]/70 bg-[linear-gradient(180deg,rgba(194,161,77,0.14),rgba(176,141,87,0.05))] hover:border-[#C2A14D]/90 transition"
                                             >
                                                 Return to the door
-                                            </a>
-                                            <a
+                                            </Link>
+
+                                            <Link
                                                 href="/responsible-gaming"
                                                 className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/55 hover:text-[#C2A14D] transition-colors"
                                             >
                                                 Responsible
-                                            </a>
+                                            </Link>
                                             <span className="text-[#B08D57]/35">•</span>
-                                            <a
+                                            <Link
                                                 href="/contact"
                                                 className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/55 hover:text-[#C2A14D] transition-colors"
                                             >
                                                 Contact
-                                            </a>
+                                            </Link>
                                         </div>
 
                                         <p className="pt-4 text-center text-[11px] tracking-[0.30em] uppercase text-[#B08D57]/60">
@@ -171,33 +147,6 @@ export default function TermsPage() {
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-        /* Film grain + vignette (same as home vibe) */
-        .film {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          opacity: 0.10;
-          mix-blend-mode: overlay;
-          background-image:
-            repeating-linear-gradient(0deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 2px),
-            repeating-linear-gradient(90deg, rgba(0,0,0,0.035) 0 1px, transparent 1px 3px);
-          filter: blur(0.25px);
-        }
-
-        .vignette {
-          position: absolute;
-          inset: -20px;
-          pointer-events: none;
-          background: radial-gradient(
-            1200px 700px at 50% 35%,
-            transparent 35%,
-            rgba(0,0,0,0.35) 70%,
-            rgba(0,0,0,0.65) 100%
-          );
-        }
-      `}</style>
         </main>
     )
 }
