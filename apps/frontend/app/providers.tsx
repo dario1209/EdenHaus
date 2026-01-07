@@ -1,18 +1,36 @@
-'use client'
+"use client";
 
-import { config } from '@/lib/config'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useState } from 'react'
-import { WagmiProvider } from 'wagmi'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState, type ReactNode } from "react";
+import { WagmiProvider, type Config } from "wagmi";
 
-export function Providers({ children }: { children: React.ReactNode }) {
-    const [queryClient] = useState(() => new QueryClient())
+import { arbitrum, mainnet } from "@reown/appkit/networks";
+import { createAppKit } from "@reown/appkit/react";
+
+import { projectId, wagmiAdapter } from "@/lib/config/appkit"; // create this file below
+
+const metadata = {
+    name: "Eden Haus",
+    description: "Eden Haus — Members Only",
+    url: "https://edgehaus.vercel.app/", // must match your deployed domain
+    icons: ["https://YOUR_DOMAIN_HERE/icon.png"],
+};
+
+// createAppKit must run before any useAppKit hook
+createAppKit({
+    adapters: [wagmiAdapter],
+    networks: [mainnet, arbitrum],
+    projectId,
+    metadata,
+    features: { analytics: true },
+});
+
+export function Providers({ children }: { children: ReactNode }) {
+    const [queryClient] = useState(() => new QueryClient());
 
     return (
-        <WagmiProvider config={config}>
-            <QueryClientProvider client={queryClient}>
-                {children}
-            </QueryClientProvider>
+        <WagmiProvider config={wagmiAdapter.wagmiConfig as Config}>
+            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
         </WagmiProvider>
-    )
+    );
 }
