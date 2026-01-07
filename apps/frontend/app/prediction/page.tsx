@@ -1,45 +1,37 @@
-/**
- * Prediction Markets Landing Page
- * 
- * Displays active prediction markets with:
- * - Clickable market cards linking to detail pages
- * - Live scoreboard (for sports integration)
- * - Pastel Dream vaporwave aesthetic
- * 
- * Route: /prediction
- */
+"use client"
 
-"use client";
-
-import type { Route } from 'next';
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import type { Route } from "next"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
+type MarketStatus = "active" | "closed" | "resolved"
+
 interface Market {
-    id: string;
-    slug: string;
-    question: string;
-    shortTitle: string;
-    odds: number;
-    pool: number;
-    status: "active" | "closed" | "resolved";
-    category: string;
-    icon: string;
-    yesPercent: number;
-    noPercent: number;
-    endsIn: string;
+    id: string
+    slug: string
+    question: string
+    shortTitle: string
+    odds: number
+    pool: number
+    status: MarketStatus
+    category: string
+    icon: string
+    yesPercent: number
+    noPercent: number
+    endsIn: string
 }
 
 interface ScoreboardData {
-    teamA: { name: string; score: number; shots: number };
-    teamB: { name: string; score: number; shots: number };
-    time: string;
-    possession: number;
-    isLive: boolean;
+    teamA: { name: string; score: number; shots: number }
+    teamB: { name: string; score: number; shots: number }
+    time: string
+    possession: number
+    isLive: boolean
 }
 
 // ============================================================================
@@ -89,7 +81,7 @@ const MARKETS: Market[] = [
         noPercent: 48,
         endsIn: "60 days",
     },
-];
+]
 
 const SCOREBOARD: ScoreboardData = {
     teamA: { name: "Team A", score: 1, shots: 5 },
@@ -97,136 +89,326 @@ const SCOREBOARD: ScoreboardData = {
     time: "45:23",
     possession: 55,
     isLive: true,
-};
+}
 
 const navItems: { name: string; path: Route }[] = [
-    { name: 'Live', path: '/' as Route },
-    { name: 'Sports', path: '/sports' as Route },
-    { name: 'Esports', path: '/esports' as Route },
-    { name: 'Casino', path: '/casino' as Route },
-    { name: 'Prediction', path: '/prediction' as Route }
+    { name: "Home", path: "/" as Route },
+    { name: "Sports", path: "/sports" as Route },
+    { name: "Esports", path: "/esports" as Route },
+    { name: "Casino", path: "/casino" as Route },
+    { name: "Prediction", path: "/prediction" as Route },
 ]
+
+function formatOdds(n: number) {
+    return n.toFixed(2)
+}
+
+function formatCurrency(n: number) {
+    return "$" + n.toLocaleString("en-US")
+}
 
 // ============================================================================
 // COMPONENTS
 // ============================================================================
 
-const MarketCard = ({ market }: { market: Market }) => {
-    const isHackathonMarket = market.id === "Eden Haus-hackathon";
+function Scoreboard({ data }: { data: ScoreboardData }) {
+    const pillBase =
+        "inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] border"
 
     return (
-        <Link
-            href={`/prediction/${market.slug}`}
-            className="block p-4 rounded-xl border-2 border-[#E0BBE4] bg-white/80 hover:border-[#FF6B9D] hover:shadow-lg hover:shadow-[#FF6B9D]/20 transition-all duration-300 group cursor-pointer"
-        >
-            <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                    <span className="text-2xl">{market.icon}</span>
-                    <div>
-                        <p className="text-xs text-[#957DAD] font-medium">{market.shortTitle}</p>
-                        <p className="text-lg font-bold text-[#FF6B9D] group-hover:text-[#C44569] transition-colors">
-                            {market.odds.toFixed(2)}
-                        </p>
+        <div className="rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/12 overflow-hidden">
+            <div className="p-5">
+                <div className="flex items-center justify-between gap-3">
+                    <div className="text-[11px] tracking-[0.34em] uppercase text-[#B08D57]/80">
+                        Live board
+                    </div>
+                    <span
+                        className={[
+                            pillBase,
+                            data.isLive
+                                ? "border-[#C2A14D]/45 bg-[#C2A14D]/10 text-[#F3EBDD]"
+                                : "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                        ].join(" ")}
+                    >
+                        {data.time}
+                    </span>
+                </div>
+
+                <div className="mt-5 grid grid-cols-3 items-center gap-4">
+                    <div className="text-left">
+                        <div className="text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                            {data.teamA.name}
+                        </div>
+                        <div className="mt-2 font-serif text-4xl tracking-[0.10em] text-[#F3EBDD]">
+                            {data.teamA.score}
+                        </div>
+                    </div>
+
+                    <div className="text-center">
+                        <div className="text-[11px] tracking-[0.22em] uppercase text-[#B08D57]/70">
+                            Possession
+                        </div>
+                        <div className="mt-2 font-serif text-2xl tracking-[0.10em] text-[#F3EBDD]">
+                            {data.possession}%
+                        </div>
+                    </div>
+
+                    <div className="text-right">
+                        <div className="text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                            {data.teamB.name}
+                        </div>
+                        <div className="mt-2 font-serif text-4xl tracking-[0.10em] text-[#F3EBDD]">
+                            {data.teamB.score}
+                        </div>
                     </div>
                 </div>
-                <div className="text-right">
-                    <span className="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-[#F8E8F8] text-[#957DAD]">
-                        ${market.pool.toLocaleString()}
-                    </span>
+
+                <div className="mt-5 grid grid-cols-3 gap-3">
+                    {[{ label: "Shots", value: data.teamA.shots }, { label: "Poss%", value: data.possession + "%" }, { label: "Shots", value: data.teamB.shots }].map(
+                        (stat, idx) => (
+                            <div
+                                key={idx}
+                                className="rounded-2xl border border-[#B08D57]/18 bg-[#0A0E0C]/10 px-4 py-3 text-center"
+                            >
+                                <div className="text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                                    {stat.label}
+                                </div>
+                                <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                    {stat.value}
+                                </div>
+                            </div>
+                        ),
+                    )}
                 </div>
             </div>
 
-            {/* Progress bar showing Yes/No split */}
-            <div className="h-1.5 rounded-full overflow-hidden flex mb-2">
-                <div
-                    className="bg-gradient-to-r from-[#10B981] to-[#34D399] transition-all duration-500"
-                    style={{ width: `${market.yesPercent}%` }}
-                />
-                <div
-                    className="bg-gradient-to-r from-[#F43F5E] to-[#FB7185] transition-all duration-500"
-                    style={{ width: `${market.noPercent}%` }}
-                />
+            <div className="border-t border-[#B08D57]/16 px-5 py-4">
+                <div className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/40">
+                    Real-time micro-betting • sub-second settlement
+                </div>
             </div>
+        </div>
+    )
+}
 
-            <div className="flex justify-between text-xs text-[#957DAD]">
-                <span>Yes {market.yesPercent}% / No {market.noPercent}%</span>
-                <span>{market.endsIn}</span>
-            </div>
+function MarketCard({
+    market,
+    onToggle,
+    expanded,
+    addSelection,
+}: {
+    market: Market
+    expanded: boolean
+    onToggle: () => void
+    addSelection: (market: Market, side: "YES" | "NO", price: number) => void
+}) {
+    const pillBase =
+        "inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] border"
 
-            {isHackathonMarket && (
-                <div className="mt-3 pt-3 border-t border-[#E0BBE4]">
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#FF6B9D]">
-                        <span className="w-2 h-2 rounded-full bg-[#FF6B9D] animate-pulse" />
-                        Featured Market
-                    </span>
+    const buttonBase =
+        "rounded-xl border border-[#B08D57]/28 bg-[#0A0E0C]/14 hover:bg-[#0A0E0C]/24 hover:border-[#C2A14D]/45 transition"
+
+    const featured = market.id === "Eden Haus-hackathon"
+
+    // Lightweight "price" mapping from yes/no split
+    const yesPrice = market.yesPercent / 100
+    const noPrice = market.noPercent / 100
+
+    return (
+        <div
+            className={[
+                "rounded-2xl border bg-[#0A0E0C]/12 transition",
+                expanded
+                    ? "border-[#C2A14D]/45"
+                    : "border-[#B08D57]/22 hover:border-[#C2A14D]/35",
+            ].join(" ")}
+        >
+            <button
+                type="button"
+                onClick={onToggle}
+                className="w-full text-left px-4 py-4"
+                aria-expanded={expanded}
+                aria-controls={`market-${market.id}`}
+            >
+                <div className="flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                            <span className="text-xl opacity-90">{market.icon}</span>
+                            <span className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/75">
+                                {market.category}
+                            </span>
+                            {featured && (
+                                <span className="inline-flex items-center gap-2 rounded-full border border-[#C2A14D]/35 bg-[#C2A14D]/10 px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-[#F3EBDD]">
+                                    <span className="inline-block h-2 w-2 rounded-full bg-[#C2A14D] shadow-[0_0_16px_rgba(194,161,77,0.45)]" />
+                                    Featured
+                                </span>
+                            )}
+                        </div>
+
+                        <div className="mt-3 font-semibold text-[#F3EBDD]">
+                            {market.question}
+                        </div>
+
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                            <span
+                                className={[
+                                    pillBase,
+                                    "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                                ].join(" ")}
+                            >
+                                Pool: {formatCurrency(market.pool)}
+                            </span>
+                            <span
+                                className={[
+                                    pillBase,
+                                    "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                                ].join(" ")}
+                            >
+                                Ends in {market.endsIn}
+                            </span>
+                            <span
+                                className={[
+                                    pillBase,
+                                    market.status === "active"
+                                        ? "border-[#C2A14D]/45 bg-[#C2A14D]/10 text-[#F3EBDD]"
+                                        : "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                                ].join(" ")}
+                            >
+                                {market.status}
+                            </span>
+                        </div>
+
+                        <div className="mt-4 h-1.5 rounded-full overflow-hidden flex">
+                            <div
+                                className="bg-[linear-gradient(90deg,rgba(194,161,77,0.95),rgba(176,141,87,0.55))]"
+                                style={{ width: `${market.yesPercent}%` }}
+                            />
+                            <div
+                                className="bg-[linear-gradient(90deg,rgba(216,207,192,0.18),rgba(10,14,12,0.30))]"
+                                style={{ width: `${market.noPercent}%` }}
+                            />
+                        </div>
+
+                        <div className="mt-2 text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                            Yes {market.yesPercent}% • No {market.noPercent}%
+                        </div>
+                    </div>
+
+                    <div className="shrink-0 flex flex-col items-end gap-2">
+                        <span className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/45">
+                            {expanded ? "Close" : "Open"}
+                        </span>
+                        <span
+                            className={[
+                                "inline-flex items-center justify-center h-10 w-10 rounded-full border transition",
+                                expanded
+                                    ? "border-[#C2A14D]/55 bg-[#C2A14D]/10 text-[#F3EBDD]"
+                                    : "border-[#B08D57]/22 bg-[#0A0E0C]/10 text-[#D8CFC0]/60",
+                            ].join(" ")}
+                        >
+                            {expanded ? "−" : "+"}
+                        </span>
+                    </div>
+                </div>
+            </button>
+
+            {expanded && (
+                <div id={`market-${market.id}`} className="px-4 pb-4 pt-0">
+                    <div className="rounded-2xl border border-[#B08D57]/18 bg-[#0A0E0C]/10 p-4">
+                        <div className="flex items-center justify-between gap-3">
+                            <div className="text-[11px] tracking-[0.34em] uppercase text-[#B08D57]/80">
+                                Trade
+                            </div>
+                            <div className="text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/50">
+                                Tap to add
+                            </div>
+                        </div>
+
+                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button
+                                onClick={() => addSelection(market, "YES", yesPrice)}
+                                className={`w-full px-4 py-3 text-left ${buttonBase}`}
+                            >
+                                <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
+                                    YES
+                                </div>
+                                <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                    {formatOdds(yesPrice)}
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => addSelection(market, "NO", noPrice)}
+                                className={`w-full px-4 py-3 text-left ${buttonBase}`}
+                            >
+                                <div className="text-[11px] uppercase tracking-[0.28em] text-[#B08D57]/70">
+                                    NO
+                                </div>
+                                <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                    {formatOdds(noPrice)}
+                                </div>
+                            </button>
+                        </div>
+
+                        <div className="mt-4 flex items-center justify-between gap-3">
+                            <Link
+                                href={`/prediction/${market.slug}`}
+                                className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
+                            >
+                                Details →
+                            </Link>
+
+                            <button
+                                type="button"
+                                onClick={onToggle}
+                                className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
+                            >
+                                Collapse →
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
-        </Link>
-    );
-};
-
-const Scoreboard = ({ data }: { data: ScoreboardData }) => (
-    <div className="text-center">
-        {/* Score Display */}
-        <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="text-center">
-                <p className="text-5xl font-black text-[#7EC8E3]">{data.teamA.score}</p>
-                <p className="text-sm text-[#957DAD] mt-1">{data.teamA.name}</p>
-            </div>
-            <div className="text-2xl text-[#E0BBE4] font-light">-</div>
-            <div className="text-center">
-                <p className="text-5xl font-black text-[#FF6B9D]">{data.teamB.score}</p>
-                <p className="text-sm text-[#957DAD] mt-1">{data.teamB.name}</p>
-            </div>
         </div>
-
-        {/* Time */}
-        <div className="flex items-center justify-center gap-2 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-            <span className="text-lg font-bold text-[#7EC8E3]">{data.time}</span>
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 p-4 rounded-xl bg-[#F8E8F8]/50">
-            <div className="text-center">
-                <p className="text-xl font-bold text-[#7EC8E3]">{data.teamA.shots}</p>
-                <p className="text-xs text-[#957DAD]">Shots</p>
-            </div>
-            <div className="text-center">
-                <p className="text-xl font-bold text-[#6B4C7A]">{data.possession}%</p>
-                <p className="text-xs text-[#957DAD]">Possession</p>
-            </div>
-            <div className="text-center">
-                <p className="text-xl font-bold text-[#FF6B9D]">{data.teamB.shots}</p>
-                <p className="text-xs text-[#957DAD]">Shots</p>
-            </div>
-        </div>
-    </div>
-);
+    )
+}
 
 // ============================================================================
 // MAIN PAGE
 // ============================================================================
 
 export default function PredictionPage() {
-    const [currentTime, setCurrentTime] = useState('')
-    const [currentDate, setCurrentDate] = useState('')
-    const [scoreboardTime, setScoreboardTime] = useState(SCOREBOARD.time);
+    const pathname = usePathname()
+
+    const [currentTime, setCurrentTime] = useState("")
+    const [currentDate, setCurrentDate] = useState("")
+
+    const [expandedMarketId, setExpandedMarketId] = useState<string | null>(null)
+
+    const [tradeSlip, setTradeSlip] = useState<
+        { market: string; side: "YES" | "NO"; price: number }[]
+    >([])
+
+    const [scoreboardTime, setScoreboardTime] = useState(SCOREBOARD.time)
 
     // Update time and date
     useEffect(() => {
         const timer = setInterval(() => {
             const now = new Date()
-            setCurrentTime(now.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            }))
-            setCurrentDate(now.toLocaleDateString('en-US', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric'
-            }))
+            setCurrentTime(
+                now.toLocaleTimeString("en-US", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                }),
+            )
+            setCurrentDate(
+                now.toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                }),
+            )
         }, 1000)
         return () => clearInterval(timer)
     }, [])
@@ -234,582 +416,417 @@ export default function PredictionPage() {
     // Simulate live timer for scoreboard
     useEffect(() => {
         const interval = setInterval(() => {
-            const [mins, secs] = scoreboardTime.split(":").map(Number);
-            const totalSecs = mins * 60 + secs + 1;
-            const newMins = Math.floor(totalSecs / 60);
-            const newSecs = totalSecs % 60;
-            setScoreboardTime(`${newMins}:${newSecs.toString().padStart(2, "0")}`);
-        }, 1000);
+            const [mins, secs] = scoreboardTime.split(":").map(Number)
+            const totalSecs = mins * 60 + secs + 1
+            const newMins = Math.floor(totalSecs / 60)
+            const newSecs = totalSecs % 60
+            setScoreboardTime(`${newMins}:${newSecs.toString().padStart(2, "0")}`)
+        }, 1000)
 
-        return () => clearInterval(interval);
-    }, [scoreboardTime]);
+        return () => clearInterval(interval)
+    }, [scoreboardTime])
+
+    const activeNav = (href: string) => pathname === href
+
+    const addSelection = (market: Market, side: "YES" | "NO", price: number) => {
+        setTradeSlip((prev) => [
+            ...prev,
+            { market: market.shortTitle, side, price },
+        ])
+    }
+
+    const removeSelection = (index: number) => {
+        setTradeSlip((prev) => prev.filter((_, i) => i !== index))
+    }
+
+    const avgPrice = useMemo(() => {
+        if (tradeSlip.length === 0) return 0
+        return tradeSlip.reduce((acc, t) => acc + t.price, 0) / tradeSlip.length
+    }, [tradeSlip])
+
+    // Design tokens (keep local, consistent with Sports)
+    const panelClass =
+        "relative rounded-3xl bg-[linear-gradient(135deg,rgba(10,14,12,0.55),rgba(10,14,12,0.22))] backdrop-blur-md shadow-[0_40px_120px_rgba(0,0,0,0.55)] ring-1 ring-[#B08D57]/12 border border-[#B08D57]/45"
+
+    const innerBorder = (
+        <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/16" />
+    )
+
+    const subtleLabel =
+        "text-[11px] tracking-[0.34em] uppercase text-[#B08D57]/80"
+
+    const subtleText =
+        "text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/50"
 
     return (
-        <div className="min-h-screen overflow-hidden relative">
-            {/* Dreamy Vaporwave Background - Prediction Theme */}
-            <div className="fixed inset-0">
-                {/* Main gradient - soft prediction pastels */}
-                <div
-                    className="absolute inset-0"
-                    style={{
-                        background: 'linear-gradient(180deg, #E6E6FA 0%, #DDA0DD 15%, #FFB6C1 30%, #FFDAB9 50%, #B0E0E6 70%, #98D8C8 85%, #E6E6FA 100%)'
-                    }}
-                />
+        <main className="relative min-h-screen overflow-hidden">
+            {/* Eden Haus atmosphere (match Sports) */}
+            <div className="absolute inset-0 bg-[#1F3D2B]" />
+            <div className="absolute inset-0 bg-[radial-gradient(1200px_700px_at_50%_35%,rgba(243,235,221,0.10),rgba(31,61,43,0.65),rgba(10,14,12,0.92))]" />
+            <div className="absolute inset-0 opacity-[0.10] mix-blend-soft-light wallpaper" />
+            <div className="absolute inset-0 opacity-[0.10] deco-lines" />
 
-                {/* Secondary overlay for depth */}
-                <div
-                    className="absolute inset-0 opacity-50"
-                    style={{
-                        background: 'radial-gradient(ellipse at 30% 20%, rgba(230, 230, 250, 0.4) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(255, 182, 193, 0.4) 0%, transparent 50%)'
-                    }}
-                />
+            <div className="relative z-10 px-4 md:px-8 py-10">
+                {/* Header (match Sports) */}
+                <header className={`${panelClass} px-6 py-5`}>
+                    {innerBorder}
 
-                {/* Retro grid overlay */}
-                <div
-                    className="absolute inset-0 opacity-25"
-                    style={{
-                        backgroundImage: `
-                            linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
-                        `,
-                        backgroundSize: '40px 40px'
-                    }}
-                />
-
-                {/* Floating clouds */}
-                <div className="absolute top-16 left-[8%] text-5xl opacity-70 animate-bounce" style={{ animationDuration: '6s' }}>☁️</div>
-                <div className="absolute top-32 right-[12%] text-4xl opacity-60 animate-bounce" style={{ animationDuration: '8s', animationDelay: '1s' }}>☁️</div>
-                <div className="absolute top-48 left-[25%] text-3xl opacity-50 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>☁️</div>
-
-                {/* Sparkles */}
-                <div className="absolute top-24 right-[30%] text-2xl opacity-60 animate-pulse">✦</div>
-                <div className="absolute top-40 left-[15%] text-xl opacity-50 animate-pulse" style={{ animationDelay: '0.5s' }}>✧</div>
-                <div className="absolute bottom-32 right-[20%] text-2xl opacity-60 animate-pulse" style={{ animationDelay: '1s' }}>✦</div>
-                <div className="absolute bottom-48 left-[35%] text-xl opacity-50 animate-pulse" style={{ animationDelay: '1.5s' }}>✧</div>
-                <div className="absolute top-[60%] right-[8%] text-lg opacity-40 animate-pulse" style={{ animationDelay: '2s' }}>⭐</div>
-
-                {/* Prediction-themed floating elements */}
-                <div className="absolute bottom-24 right-[15%] text-3xl opacity-40 animate-bounce" style={{ animationDuration: '5s' }}>🔮</div>
-                <div className="absolute top-[45%] left-[5%] text-2xl opacity-30 animate-bounce" style={{ animationDuration: '6s', animationDelay: '1s' }}>📊</div>
-                <div className="absolute bottom-[40%] right-[5%] text-2xl opacity-35 animate-bounce" style={{ animationDuration: '7s', animationDelay: '2s' }}>🎯</div>
-            </div>
-
-            {/* Main Desktop Window */}
-            <div className="relative z-10 mx-4 mt-4">
-                {/* Window Frame */}
-                <div
-                    className="rounded-xl overflow-hidden"
-                    style={{
-                        background: 'linear-gradient(180deg, #E6E6FA 0%, #DDA0DD 100%)',
-                        border: '3px solid #D8BFD8',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.12), inset 0 2px 0 rgba(255,255,255,0.5)'
-                    }}
-                >
-                    {/* Window Title Bar */}
-                    <div
-                        className="flex items-center justify-between px-4 py-2"
-                        style={{
-                            background: 'linear-gradient(90deg, #957DAD 0%, #7EC8E3 25%, #98D8C8 50%, #7EC8E3 75%, #957DAD 100%)',
-                            borderBottom: '2px solid rgba(255,255,255,0.3)'
-                        }}
-                    >
-                        <div className="flex items-center gap-3">
-                            <span className="text-sm font-black text-white tracking-widest drop-shadow-md">
-                                PREDICTION.EXE
-                            </span>
-                            <div
-                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold"
-                                style={{
-                                    background: 'linear-gradient(135deg, #957DAD, #6B4C7A)',
-                                    color: 'white',
-                                    boxShadow: '0 2px 8px rgba(149, 125, 173, 0.4)'
-                                }}
-                            >
-                                <span className="w-2 h-2 bg-white rounded-full animate-ping" />
-                                {MARKETS.length} MARKETS
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-white/90">
-                                <span>{currentDate}</span>
-                                <span className="text-white/60">|</span>
-                                <span>{currentTime}</span>
-                            </div>
-                            <div className="flex gap-1.5">
-                                <button className="w-4 h-4 rounded-sm bg-yellow-300 hover:bg-yellow-400 transition-colors flex items-center justify-center text-[10px] font-bold text-yellow-800">−</button>
-                                <button className="w-4 h-4 rounded-sm bg-green-300 hover:bg-green-400 transition-colors flex items-center justify-center text-[10px] font-bold text-green-800">□</button>
-                                <button className="w-4 h-4 rounded-sm bg-pink-300 hover:bg-pink-400 transition-colors flex items-center justify-center text-[10px] font-bold text-pink-800">×</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Menu Bar */}
-                    <div
-                        className="flex items-center gap-6 px-4 py-1.5 text-xs font-medium"
-                        style={{
-                            background: 'rgba(255,255,255,0.85)',
-                            borderBottom: '1px solid rgba(186, 85, 211, 0.2)',
-                            color: '#6B4C7A'
-                        }}
-                    >
-                        <span className="hover:text-pink-500 cursor-pointer transition-colors">File</span>
-                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Edit</span>
-                        <span className="hover:text-pink-500 cursor-pointer transition-colors">View</span>
-                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Markets</span>
-                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Wallet</span>
-                        <span className="hover:text-pink-500 cursor-pointer transition-colors">Help</span>
-                    </div>
-
-                    {/* Main Header Content */}
-                    <div
-                        className="flex items-center justify-between px-4 py-3"
-                        style={{
-                            background: 'rgba(255,255,255,0.9)',
-                            backdropFilter: 'blur(10px)'
-                        }}
-                    >
-                        <div className="flex items-center gap-8">
-                            {/* Logo */}
-                            <Link href={'/' as Route} className="flex items-center gap-3 group">
-                                <div
-                                    className="w-11 h-11 rounded-xl flex items-center justify-center text-xl font-black text-white transition-all group-hover:scale-110 group-hover:rotate-3"
-                                    style={{
-                                        background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 50%, #98D8C8 100%)',
-                                        boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4), inset 0 2px 0 rgba(255,255,255,0.3)'
-                                    }}
-                                >
-                                    μ
+                    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div className="min-w-0">
+                            <Link href={("/" as Route)} className="group inline-block">
+                                <div className="flex items-baseline gap-3">
+                                    <span className="font-serif text-2xl md:text-3xl tracking-[0.12em] text-[#F3EBDD] drop-shadow-[0_10px_25px_rgba(0,0,0,0.55)]">
+                                        Eden Haus
+                                    </span>
+                                    <span className="hidden sm:inline text-[11px] tracking-[0.45em] uppercase text-[#B08D57]/80">
+                                        Members Only
+                                    </span>
                                 </div>
-                                <div className="flex flex-col">
-                                    <span className="text-xl font-black tracking-tight leading-none">
-                                        <span style={{ color: '#957DAD' }}>MICRO</span>
-                                        <span style={{ color: '#7EC8E3' }}>BETS</span>
-                                    </span>
-                                    <span className="text-[10px] font-bold tracking-widest" style={{ color: '#98D8C8' }}>
-                                        🔮 PREDICTIONS 🔮
-                                    </span>
+                                <div className="mt-1 text-[11px] tracking-[0.34em] uppercase text-[#D8CFC0]/50 group-hover:text-[#C2A14D]/80 transition-colors">
+                                    Quiet Confidence • Reliable Odds
                                 </div>
                             </Link>
 
-                            {/* Navigation */}
-                            <nav className="hidden md:flex items-center gap-1">
-                                {navItems.map((item) => {
-                                    const isPrediction = item.name === 'Prediction'
+                            <div className="mt-4 flex flex-wrap items-center gap-3">
+                                <div className="inline-flex items-center gap-2 rounded-full px-3 py-2 border border-[#B08D57]/30 bg-[#0A0E0C]/14">
+                                    <span className="inline-block h-2 w-2 rounded-full bg-[#C2A14D] shadow-[0_0_18px_rgba(194,161,77,0.40)]" />
+                                    <span className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/70">
+                                        {MARKETS.length} markets
+                                    </span>
+                                </div>
 
-                                    return (
-                                        <Link
-                                            key={item.name}
-                                            href={item.path}
-                                            className={`
-                                                px-4 py-2 rounded-full text-sm font-bold transition-all duration-300
-                                                ${isPrediction
-                                                    ? 'text-white scale-105'
-                                                    : 'hover:scale-105'
-                                                }
-                                            `}
-                                            style={isPrediction ? {
-                                                background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 50%, #98D8C8 100%)',
-                                                boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
-                                            } : {
-                                                color: '#957DAD',
-                                                background: 'transparent'
-                                            }}
-                                        >
-                                            {isPrediction && (
-                                                <span className="inline-block w-2 h-2 bg-white rounded-full mr-2 animate-pulse" />
-                                            )}
-                                            {item.name}
-                                        </Link>
-                                    )
-                                })}
-                            </nav>
+                                <div className="hidden sm:inline-flex items-center gap-2 rounded-full px-3 py-2 border border-[#B08D57]/25 bg-[#0A0E0C]/12">
+                                    <span className="text-[#C2A14D]/75">⏱</span>
+                                    <span className="text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/60">
+                                        {currentDate} • {currentTime}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Right side */}
-                        <div className="flex items-center gap-3">
-                            <button
-                                className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all hover:scale-105"
-                                style={{
-                                    background: 'linear-gradient(135deg, rgba(149,125,173,0.2), rgba(126,200,227,0.2))',
-                                    border: '2px solid rgba(149, 125, 173, 0.3)',
-                                    color: '#957DAD'
-                                }}
-                            >
-                                <span>🔍</span>
-                                <span>Search</span>
-                            </button>
-                            <button
-                                className="px-5 py-2.5 rounded-full text-sm font-black text-white transition-all hover:scale-105"
-                                style={{
-                                    background: 'linear-gradient(135deg, #957DAD 0%, #7EC8E3 100%)',
-                                    boxShadow: '0 4px 15px rgba(149, 125, 173, 0.4)'
-                                }}
-                            >
-                                🔮 Connect Wallet
-                            </button>
-                        </div>
+                        <nav className="flex flex-wrap items-center gap-2">
+                            {navItems.map((item) => {
+                                const isActive = activeNav(item.path as string)
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        href={item.path}
+                                        className={[
+                                            "relative rounded-full px-4 py-2 text-xs uppercase tracking-[0.28em] transition border",
+                                            isActive
+                                                ? "border-[#C2A14D]/65 text-[#F3EBDD] bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.05))]"
+                                                : "border-[#B08D57]/30 text-[#D8CFC0]/65 bg-[#0A0E0C]/10 hover:text-[#F3EBDD] hover:border-[#C2A14D]/45",
+                                        ].join(" ")}
+                                    >
+                                        {item.name}
+                                    </Link>
+                                )
+                            })}
+                        </nav>
                     </div>
-                </div>
-            </div>
+                </header>
 
-            {/* Main Content */}
-            <div className="relative z-10 px-4 pb-4 mt-4 max-w-7xl mx-auto">
-                {/* Hero Header */}
-                <div
-                    className="rounded-xl overflow-hidden mb-8"
-                    style={{
-                        background: 'rgba(255,255,255,0.9)',
-                        border: '3px solid #D8BFD8',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-                    }}
-                >
-                    <div
-                        className="px-4 py-2 flex items-center justify-between"
-                        style={{
-                            background: 'linear-gradient(90deg, #FF6B9D 0%, #957DAD 50%, #7EC8E3 100%)'
-                        }}
-                    >
-                        <div className="flex items-center gap-2">
-                            <span className="text-white text-sm font-bold drop-shadow-sm">✦ PREDICTION_LIVE.EXE</span>
-                        </div>
-                        <div className="flex gap-1">
-                            <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
-                            <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
-                            <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
-                        </div>
-                    </div>
+                {/* Layout */}
+                <div className="mt-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
+                    {/* Markets */}
+                    <section className="xl:col-span-8">
+                        <div className={`${panelClass} p-5`}>
+                            {innerBorder}
 
-                    <div className="p-8">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h1
-                                    className="text-4xl font-black mb-3"
-                                    style={{
-                                        background: 'linear-gradient(135deg, #FF6B9D, #957DAD, #7EC8E3)',
-                                        backgroundClip: 'text',
-                                        WebkitBackgroundClip: 'text',
-                                        color: 'transparent'
-                                    }}
-                                >
-                                    Prediction Markets
-                                </h1>
-                                <p className="text-[#957DAD]">
-                                    Real-time micro-betting with sub-second settlement
-                                </p>
+                            <div className="flex items-end justify-between gap-4">
+                                <div>
+                                    <div className={subtleLabel}>Prediction</div>
+                                    <div className="mt-1 font-serif text-2xl tracking-[0.10em] text-[#F3EBDD]">
+                                        Active markets
+                                    </div>
+                                </div>
+
+                                <div className="hidden md:block text-right">
+                                    <div className={subtleText}>Tap a market</div>
+                                    <div className="mt-1 text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/55">
+                                        Expand to trade
+                                    </div>
+                                </div>
                             </div>
 
-                            <div
-                                className="flex items-center gap-2 px-4 py-2 rounded-full"
-                                style={{
-                                    background: 'rgba(255,255,255,0.8)',
-                                    border: '2px solid #FF6B9D'
-                                }}
-                            >
-                                <span className="w-2 h-2 rounded-full bg-[#FF6B9D] animate-pulse" />
-                                <span className="text-sm font-bold text-[#FF6B9D]">LIVE</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Two Column Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-                    {/* Active Markets */}
-                    <div
-                        className="rounded-xl overflow-hidden"
-                        style={{
-                            background: 'rgba(255,255,255,0.9)',
-                            border: '3px solid #D8BFD8',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-                        }}
-                    >
-                        <div
-                            className="px-4 py-2 flex items-center justify-between"
-                            style={{
-                                background: 'linear-gradient(90deg, #957DAD 0%, #7EC8E3 100%)'
-                            }}
-                        >
-                            <div className="flex items-center gap-2">
-                                <span className="text-white text-xs font-bold drop-shadow-sm">📊 ACTIVE_MARKETS.DAT</span>
-                            </div>
-                            <div className="flex gap-1">
-                                <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
-                            </div>
-                        </div>
-
-                        <div className="p-6">
-                            <h2 className="text-2xl font-bold text-[#6B4C7A] mb-6">Active Markets</h2>
-
-                            <div className="space-y-4">
+                            <div className="mt-5 space-y-3">
                                 {MARKETS.map((market) => (
-                                    <MarketCard key={market.id} market={market} />
+                                    <MarketCard
+                                        key={market.id}
+                                        market={market}
+                                        expanded={expandedMarketId === market.id}
+                                        onToggle={() =>
+                                            setExpandedMarketId((prev) =>
+                                                prev === market.id ? null : market.id,
+                                            )
+                                        }
+                                        addSelection={addSelection}
+                                    />
                                 ))}
                             </div>
 
-                            <Link
-                                href="/prediction/all"
-                                className="inline-flex items-center gap-2 mt-6 text-sm font-semibold text-[#FF6B9D] hover:text-[#C44569] transition-colors"
-                            >
-                                View All Markets
-                                <span>→</span>
-                            </Link>
-                        </div>
-                    </div>
+                            <div className="mt-5 flex items-center justify-between gap-3">
+                                <div className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/40">
+                                    Settlement: chainlink • cronos
+                                </div>
 
-                    {/* Scoreboard */}
-                    <div
-                        className="rounded-xl overflow-hidden"
-                        style={{
-                            background: 'rgba(255,255,255,0.9)',
-                            border: '3px solid #D8BFD8',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-                        }}
-                    >
-                        <div
-                            className="px-4 py-2 flex items-center justify-between"
-                            style={{
-                                background: 'linear-gradient(90deg, #FF6B9D 0%, #C44569 100%)'
-                            }}
-                        >
-                            <div className="flex items-center gap-2">
-                                <span className="text-white text-xs font-bold drop-shadow-sm">🎮 SCOREBOARD.EXE</span>
-                            </div>
-                            <div className="flex gap-1">
-                                <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
+                                <Link
+                                    href={("/prediction/all" as Route)}
+                                    className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
+                                >
+                                    View all →
+                                </Link>
                             </div>
                         </div>
 
-                        <div className="p-6">
-                            <h2 className="text-2xl font-bold text-[#6B4C7A] mb-6">Scoreboard</h2>
-                            <Scoreboard data={{ ...SCOREBOARD, time: scoreboardTime }} />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Featured Market Banner */}
-                <Link
-                    href="/prediction/markets"
-                    className="block mt-8 group"
-                >
-                    <div
-                        className="rounded-xl overflow-hidden transition-all hover:scale-[1.01]"
-                        style={{
-                            background: 'rgba(255,255,255,0.9)',
-                            border: '3px solid #D8BFD8',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-                        }}
-                    >
-                        <div
-                            className="px-4 py-2 flex items-center justify-between"
-                            style={{
-                                background: 'linear-gradient(90deg, #7EC8E3 0%, #5BA4C9 100%)'
-                            }}
-                        >
-                            <div className="flex items-center gap-2">
-                                <span className="text-white text-xs font-bold drop-shadow-sm">🏆 FEATURED_MARKET.EXE</span>
-                            </div>
-                            <div className="flex gap-1">
-                                <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
-                            </div>
-                        </div>
-
-                        <div className="p-8 bg-gradient-to-r from-[#FF6B9D]/10 via-[#E0BBE4]/10 to-[#7EC8E3]/10">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-6">
-                                    <div
-                                        className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl shadow-lg group-hover:scale-110 transition-transform"
-                                        style={{
-                                            background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)',
-                                            boxShadow: '0 8px 30px rgba(255, 107, 157, 0.4)'
-                                        }}
-                                    >
-                                        🏆
+                        {/* Stats row (match Sports style) */}
+                        <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {[
+                                { label: "Total volume", value: "$9.85K", note: "demo" },
+                                { label: "Active markets", value: String(MARKETS.length), note: "live" },
+                                { label: "Total bets", value: "142", note: "demo" },
+                                { label: "Unique traders", value: "89", note: "demo" },
+                            ].map((stat) => (
+                                <div key={stat.label} className={`${panelClass} p-5`}>
+                                    {innerBorder}
+                                    <div className={subtleLabel}>{stat.label}</div>
+                                    <div className="mt-2 font-serif text-2xl tracking-[0.10em] text-[#F3EBDD]">
+                                        {stat.value}
                                     </div>
-                                    <div>
-                                        <p className="text-xs text-[#FF6B9D] font-semibold mb-1 flex items-center gap-2">
-                                            <span className="w-2 h-2 rounded-full bg-[#FF6B9D] animate-pulse" />
-                                            FEATURED MARKET
-                                        </p>
-                                        <h3 className="text-2xl font-bold text-[#6B4C7A] group-hover:text-[#FF6B9D] transition-colors">
-                                            Will Eden Haus win the Cronos x402 Hackathon?
-                                        </h3>
-                                        <div className="flex items-center gap-4 mt-3">
-                                            <span className="px-3 py-1 rounded-full bg-white border border-[#E0BBE4] text-xs font-medium text-[#6B4C7A]">
-                                                📊 $1,250 Pool
-                                            </span>
-                                            <span className="px-3 py-1 rounded-full bg-white border border-[#E0BBE4] text-xs font-medium text-[#6B4C7A]">
-                                                ⏰ 31 days left
-                                            </span>
-                                            <span className="px-3 py-1 rounded-full bg-[#10B981]/10 border border-[#10B981]/30 text-xs font-medium text-[#10B981]">
-                                                Yes 42%
-                                            </span>
-                                            <span className="px-3 py-1 rounded-full bg-[#F43F5E]/10 border border-[#F43F5E]/30 text-xs font-medium text-[#F43F5E]">
-                                                No 58%
-                                            </span>
+                                    <div className="mt-2 text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                                        {stat.note}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* How it works (clean + Eden Haus) */}
+                        <div className={`mt-6 ${panelClass} p-5`}>
+                            {innerBorder}
+
+                            <div>
+                                <div className={subtleLabel}>How it works</div>
+                                <div className="mt-1 font-serif text-xl tracking-[0.10em] text-[#F3EBDD]">
+                                    Trade a conviction
+                                </div>
+                            </div>
+
+                            <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+                                {
+                                    [
+                                        {
+                                            step: "1",
+                                            title: "Pick a market",
+                                            desc: "Browse active markets and open the one you want.",
+                                        },
+                                        {
+                                            step: "2",
+                                            title: "Choose YES/NO",
+                                            desc: "Select a side and add it to your trade slip.",
+                                        },
+                                        {
+                                            step: "3",
+                                            title: "Confirm",
+                                            desc: "Connect wallet and execute when ready.",
+                                        },
+                                    ] as const
+                                ).map((s) => (
+                                    <div
+                                        key={s.step}
+                                        className="rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/12 p-5"
+                                    >
+                                        <div className={subtleLabel}>Step {s.step}</div>
+                                        <div className="mt-2 font-semibold text-[#F3EBDD]">
+                                            {s.title}
+                                        </div>
+                                        <div className="mt-2 text-sm text-[#D8CFC0]/60">
+                                            {s.desc}
                                         </div>
                                     </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Right rail */}
+                    <aside className="xl:col-span-4">
+                        <div className={`${panelClass} p-5 xl:sticky xl:top-6`}>
+                            {innerBorder}
+
+                            <div className="flex items-end justify-between gap-3">
+                                <div>
+                                    <div className={subtleLabel}>Trade slip</div>
+                                    <div className="mt-1 font-serif text-xl tracking-[0.10em] text-[#F3EBDD]">
+                                        Quiet stack
+                                    </div>
                                 </div>
 
-                                <div className="text-right">
-                                    <span
-                                        className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-bold group-hover:scale-105 transition-transform"
-                                        style={{
-                                            background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)',
-                                            boxShadow: '0 8px 30px rgba(255, 107, 157, 0.4)'
-                                        }}
-                                    >
-                                        Trade Now
-                                        <span>→</span>
-                                    </span>
+                                <span className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-[#B08D57]/25 bg-[#0A0E0C]/10 px-3 text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/60">
+                                    {tradeSlip.length}
+                                </span>
+                            </div>
+
+                            <div className="mt-5 rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/12 overflow-hidden">
+                                {tradeSlip.length === 0 ? (
+                                    <div className="px-5 py-10 text-center">
+                                        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#B08D57]/22 bg-[#0A0E0C]/12 text-2xl opacity-90">
+                                            🔮
+                                        </div>
+                                        <div className="text-sm font-semibold text-[#F3EBDD]">
+                                            No positions yet
+                                        </div>
+                                        <div className="mt-2 text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                                            Expand a market to trade
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="max-h-[340px] overflow-y-auto p-4 space-y-3">
+                                            {tradeSlip.map((t, index) => (
+                                                <div
+                                                    key={`${t.market}-${t.side}-${index}`}
+                                                    className="rounded-2xl border border-[#B08D57]/20 bg-[#0A0E0C]/10 p-4"
+                                                >
+                                                    <div className="flex items-start justify-between gap-3">
+                                                        <div className="min-w-0 flex-1">
+                                                            <div className="truncate text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/45">
+                                                                {t.market}
+                                                            </div>
+                                                            <div className="mt-1 font-semibold text-[#F3EBDD]">
+                                                                {t.side}
+                                                            </div>
+                                                        </div>
+
+                                                        <button
+                                                            onClick={() => removeSelection(index)}
+                                                            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#B08D57]/20 bg-[#0A0E0C]/10 text-[#D8CFC0]/60 hover:text-[#C2A14D] hover:border-[#C2A14D]/35 transition"
+                                                            aria-label="Remove selection"
+                                                            title="Remove"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="mt-3 flex items-center justify-between">
+                                                        <span className="text-[11px] tracking-[0.22em] uppercase text-[#B08D57]/65">
+                                                            Price
+                                                        </span>
+                                                        <span className="font-serif text-lg tracking-[0.08em] text-[#F3EBDD]">
+                                                            {formatOdds(t.price)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className="border-t border-[#B08D57]/16 p-4">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/50">
+                                                    Avg price
+                                                </span>
+                                                <span className="font-serif text-xl tracking-[0.10em] text-[#F3EBDD]">
+                                                    {formatOdds(avgPrice)}
+                                                </span>
+                                            </div>
+
+                                            <div className="mt-4">
+                                                <label className="block text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/50">
+                                                    Stake (CRO)
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    placeholder="0.01"
+                                                    defaultValue="0.01"
+                                                    step="0.01"
+                                                    min="0.01"
+                                                    className="mt-2 w-full rounded-2xl border border-[#B08D57]/25 bg-[#0A0E0C]/12 px-4 py-3 text-sm text-[#F3EBDD] outline-none placeholder:text-[#D8CFC0]/25 focus:border-[#C2A14D]/45"
+                                                />
+                                            </div>
+
+                                            <button
+                                                className="mt-4 w-full rounded-2xl px-5 py-4 text-xs uppercase tracking-[0.35em] text-[#F3EBDD] border border-[#B08D57]/60 bg-[linear-gradient(180deg,rgba(194,161,77,0.14),rgba(176,141,87,0.04))] shadow-[0_18px_55px_rgba(0,0,0,0.55)] transition hover:border-[#C2A14D]/80 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]"
+                                            >
+                                                Place trade
+                                            </button>
+
+                                            <div className="mt-4 text-center text-[11px] italic text-[#D8CFC0]/32">
+                                                Keep it neat. Keep it quiet.
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+
+                            <div className="mt-6">
+                                <div className={subtleLabel}>Scoreboard</div>
+                                <div className="mt-3">
+                                    <Scoreboard data={{ ...SCOREBOARD, time: scoreboardTime }} />
+                                </div>
+                            </div>
+
+                            <div className="mt-6 rounded-3xl border border-[#B08D57]/30 bg-[#0A0E0C]/10 p-5">
+                                <div className="text-[11px] tracking-[0.48em] uppercase text-[#B08D57]/80 text-center">
+                                    Featured
+                                </div>
+
+                                <div className="mt-3 text-center font-serif text-xl tracking-[0.10em] text-[#F3EBDD]">
+                                    Eden Haus x402
+                                </div>
+
+                                <div className="mt-4 text-center text-[11px] tracking-[0.22em] uppercase text-[#D8CFC0]/40">
+                                    On-chain markets • instant settlement
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </Link>
-
-                {/* Quick Stats Row */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-                    {[
-                        { value: '$9,850', label: 'Total Volume', color: '#FF6B9D' },
-                        { value: '3', label: 'Active Markets', color: '#7EC8E3' },
-                        { value: '142', label: 'Total Bets', color: '#10B981' },
-                        { value: '89', label: 'Unique Traders', color: '#957DAD' },
-                    ].map((stat, index) => (
-                        <div
-                            key={index}
-                            className="rounded-xl overflow-hidden"
-                            style={{
-                                background: 'rgba(255,255,255,0.9)',
-                                border: '3px solid #D8BFD8',
-                                boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-                            }}
-                        >
-                            <div className="p-4 text-center">
-                                <p className="text-3xl font-black" style={{ color: stat.color }}>{stat.value}</p>
-                                <p className="text-xs text-[#957DAD] mt-1">{stat.label}</p>
-                            </div>
-                        </div>
-                    ))}
+                    </aside>
                 </div>
 
-                {/* How It Works */}
-                <div
-                    className="mt-8 rounded-xl overflow-hidden"
-                    style={{
-                        background: 'rgba(255,255,255,0.9)',
-                        border: '3px solid #D8BFD8',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
-                    }}
-                >
-                    <div
-                        className="px-4 py-2 flex items-center justify-between"
-                        style={{
-                            background: 'linear-gradient(90deg, #957DAD 0%, #6B4C7A 100%)'
-                        }}
-                    >
-                        <div className="flex items-center gap-2">
-                            <span className="text-white text-xs font-bold drop-shadow-sm">📖 HOW_IT_WORKS.TXT</span>
-                        </div>
-                        <div className="flex gap-1">
-                            <div className="w-3 h-3 rounded-full bg-yellow-300 border border-yellow-400"></div>
-                            <div className="w-3 h-3 rounded-full bg-green-300 border border-green-400"></div>
-                            <div className="w-3 h-3 rounded-full bg-red-400 border border-red-500"></div>
-                        </div>
-                    </div>
-
-                    <div className="p-8">
-                        <h2 className="text-2xl font-bold text-[#6B4C7A] mb-6">How It Works</h2>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="p-6 rounded-xl bg-[#F8E8F8]/50 border border-[#E0BBE4]">
-                                <div
-                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                                    style={{
-                                        background: 'linear-gradient(135deg, #FF6B9D 0%, #C44569 100%)'
-                                    }}
-                                >
-                                    1️⃣
-                                </div>
-                                <h3 className="text-lg font-bold text-[#6B4C7A] mb-2">Pick a Market</h3>
-                                <p className="text-sm text-[#957DAD]">
-                                    Browse active prediction markets and find one you have conviction on.
-                                </p>
-                            </div>
-
-                            <div className="p-6 rounded-xl bg-[#F8E8F8]/50 border border-[#E0BBE4]">
-                                <div
-                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                                    style={{
-                                        background: 'linear-gradient(135deg, #7EC8E3 0%, #5BA4C9 100%)'
-                                    }}
-                                >
-                                    2️⃣
-                                </div>
-                                <h3 className="text-lg font-bold text-[#6B4C7A] mb-2">Place Your Bet</h3>
-                                <p className="text-sm text-[#957DAD]">
-                                    Choose YES or NO, enter your amount, and confirm with your wallet.
-                                </p>
-                            </div>
-
-                            <div className="p-6 rounded-xl bg-[#F8E8F8]/50 border border-[#E0BBE4]">
-                                <div
-                                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4"
-                                    style={{
-                                        background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
-                                    }}
-                                >
-                                    3️⃣
-                                </div>
-                                <h3 className="text-lg font-bold text-[#6B4C7A] mb-2">Win & Claim</h3>
-                                <p className="text-sm text-[#957DAD]">
-                                    If your prediction is correct, claim your winnings instantly on-chain.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                <div className="mt-6 sm:hidden text-center text-[11px] tracking-[0.32em] uppercase text-[#D8CFC0]/40">
+                    {currentDate} • {currentTime}
                 </div>
             </div>
 
-            {/* Desktop Icons (decorative) */}
-            <div className="fixed right-8 top-36 z-5 hidden 2xl:flex flex-col gap-6">
-                {[
-                    { icon: '📁', label: 'My Bets' },
-                    { icon: '📊', label: 'Portfolio' },
-                    { icon: '⚙️', label: 'Settings' },
-                ].map((item) => (
-                    <div
-                        key={item.label}
-                        className="flex flex-col items-center gap-1 cursor-pointer group"
-                    >
-                        <div
-                            className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl transition-all group-hover:scale-110"
-                            style={{
-                                background: 'rgba(255,255,255,0.85)',
-                                border: '2px solid #D8BFD8',
-                                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-                            }}
-                        >
-                            {item.icon}
-                        </div>
-                        <span
-                            className="text-[10px] font-bold px-2 py-0.5 rounded"
-                            style={{
-                                background: 'rgba(255,255,255,0.9)',
-                                color: '#6B4C7A'
-                            }}
-                        >
-                            {item.label}
-                        </span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
+            <style jsx>{`
+                .wallpaper {
+                    background-image:
+                        radial-gradient(
+                            circle at 25% 20%,
+                            rgba(194, 161, 77, 0.06),
+                            transparent 55%
+                        ),
+                        radial-gradient(
+                            circle at 70% 60%,
+                            rgba(15, 92, 74, 0.07),
+                            transparent 60%
+                        ),
+                        radial-gradient(
+                            circle at 40% 85%,
+                            rgba(90, 31, 43, 0.05),
+                            transparent 60%
+                        );
+                    filter: blur(0.2px);
+                }
+
+                .deco-lines {
+                    background-image:
+                        linear-gradient(
+                            to right,
+                            rgba(176, 141, 87, 0.2) 1px,
+                            transparent 1px
+                        ),
+                        linear-gradient(
+                            to bottom,
+                            rgba(176, 141, 87, 0.12) 1px,
+                            transparent 1px
+                        );
+                    background-size: 140px 140px;
+                    mask-image: radial-gradient(
+                        circle at 50% 40%,
+                        black 0%,
+                        transparent 74%
+                    );
+                }
+            `}</style>
+        </main>
+    )
 }
