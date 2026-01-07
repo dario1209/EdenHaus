@@ -58,10 +58,10 @@ export default function Home() {
 
             {/* Content */}
             <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-16">
-                <div className="w-full max-w-[720px]">
+                <div className="w-full max-w-[760px]">
                     {/* Top microline */}
                     <div className="text-center">
-                        <p className="text-[11px] tracking-[0.35em] uppercase text-[#B08D57]/80">
+                        <p className="text-[11px] tracking-[0.38em] uppercase text-[#B08D57]/85">
                             Eden Haus • Members Only
                         </p>
                     </div>
@@ -69,21 +69,23 @@ export default function Home() {
                     {/* Plaque */}
                     <div
                         className={[
-                            "mt-8 rounded-3xl p-10 md:p-14",
+                            "mt-8 rounded-[28px] p-8 md:p-12",
                             "backdrop-blur-md",
                             "shadow-[0_40px_120px_rgba(0,0,0,0.55)]",
+                            "bg-[linear-gradient(135deg,rgba(10,14,12,0.55),rgba(10,14,12,0.22))]",
+                            "ring-1 ring-[#B08D57]/15",
                             doorShaking ? "shake" : "",
                         ].join(" ")}
                     >
                         {/* Brass double border */}
-                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-10 md:p-12">
+                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-8 md:p-10">
                             <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/25" />
 
                             {/* Warm spotlight */}
                             <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(194,161,77,0.22),rgba(194,161,77,0.00)_70%)] blur-2xl" />
 
                             {/* Emblem + knock door */}
-                            <div className="mx-auto flex w-full max-w-[340px] flex-col items-center">
+                            <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
                                 <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(10,14,12,0.45),rgba(10,14,12,0.20))] p-6 ring-1 ring-[#B08D57]/25">
                                     <svg
                                         width="220"
@@ -167,6 +169,12 @@ export default function Home() {
                                             stroke={isAuthenticated ? "#C2A14D" : "#6B4A32"}
                                             strokeWidth="1"
                                         />
+
+                                        {/* subtle corner brackets (deco touch) */}
+                                        <path d="M 45 35 L 45 45 M 45 35 L 55 35" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+                                        <path d="M 155 35 L 155 45 M 155 35 L 145 35" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+                                        <path d="M 45 175 L 45 165 M 45 175 L 55 175" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+                                        <path d="M 155 175 L 155 165 M 155 175 L 145 175" stroke="#D8CFC0" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
                                     </svg>
 
                                     <div className="mt-5 flex justify-center gap-2">
@@ -186,18 +194,18 @@ export default function Home() {
 
                                 {/* Title */}
                                 <div className="mt-10 text-center">
-                                    <h1 className="font-serif text-5xl md:text-6xl tracking-[0.08em] text-[#F3EBDD]">
+                                    <h1 className="font-serif text-5xl md:text-6xl tracking-[0.10em] text-[#F3EBDD] drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]">
                                         Eden Haus
                                     </h1>
-                                    <p className="mt-3 text-[11px] tracking-[0.45em] uppercase text-[#B08D57]/90">
+                                    <p className="mt-3 text-[11px] tracking-[0.52em] uppercase text-[#B08D57]/90">
                                         In house bets
                                     </p>
 
-                                    <div className="mx-auto mt-6 h-px w-36 bg-[#B08D57]/35" />
+                                    <div className="mx-auto mt-6 h-px w-44 bg-[#B08D57]/35" />
 
                                     <p className="mx-auto mt-6 max-w-md text-center text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        A discreet room for those who read the game fast and wager with composure.
-                                        Knock thrice, or slip in quietly.
+                                        A discreet room for those who read the game fast and wager with composure. Knock
+                                        thrice, or slip in quietly.
                                     </p>
                                 </div>
 
@@ -205,18 +213,28 @@ export default function Home() {
                                 <div className="mt-10 flex flex-col items-center gap-4">
                                     <button
                                         onClick={handleSlipInside}
-                                        className="group relative inline-flex items-center justify-center rounded-full px-12 py-4
-                               text-sm uppercase tracking-[0.35em] text-[#F3EBDD]
-                               border border-[#B08D57]/70
-                               bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.06))]
-                               shadow-[0_18px_55px_rgba(0,0,0,0.55)]
-                               transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]"
+                                        className={`group relative inline-flex items-center justify-center rounded-full px-12 py-4
+text-sm uppercase tracking-[0.35em] text-[#F3EBDD]
+border border-[#B08D57]/70
+bg-[linear-gradient(180deg,rgba(194,161,77,0.16),rgba(176,141,87,0.06))]
+shadow-[0_18px_55px_rgba(0,0,0,0.55)]
+transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]`}
                                     >
                                         <span className="absolute inset-0 rounded-full ring-1 ring-[#C2A14D]/15 group-hover:ring-[#C2A14D]/25" />
                                         Slip Inside
                                     </button>
 
                                     <p className="text-xs italic text-[#D8CFC0]/45">{knockText}</p>
+                                </div>
+
+                                {/* Optional: text-link entrance (extra elegant) */}
+                                <div className="mt-4">
+                                    <Link
+                                        href="/predictions"
+                                        className="text-[11px] tracking-[0.28em] uppercase text-[#D8CFC0]/50 hover:text-[#C2A14D] transition-colors"
+                                    >
+                                        Enter via the side door
+                                    </Link>
                                 </div>
                             </div>
 
@@ -225,15 +243,24 @@ export default function Home() {
                                 <div className="mx-auto mb-6 h-px w-full max-w-md bg-[#B08D57]/20" />
 
                                 <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
-                                    <Link href="/terms" className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors">
+                                    <Link
+                                        href="/terms"
+                                        className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors"
+                                    >
                                         Terms
                                     </Link>
                                     <span className="text-[#B08D57]/40">•</span>
-                                    <Link href="/responsible-gaming" className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors">
+                                    <Link
+                                        href="/responsible-gaming"
+                                        className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors"
+                                    >
                                         Responsible
                                     </Link>
                                     <span className="text-[#B08D57]/40">•</span>
-                                    <Link href="/contact" className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors">
+                                    <Link
+                                        href="/contact"
+                                        className="tracking-[0.22em] uppercase text-[#D8CFC0]/60 hover:text-[#C2A14D] transition-colors"
+                                    >
                                         Contact
                                     </Link>
                                 </nav>
