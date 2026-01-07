@@ -68,22 +68,6 @@ const navItems: { name: string; path: Route }[] = [
 	{ name: "Prediction", path: "/prediction" as Route },
 ];
 
-const pathname = usePathname();
-
-const activeNav = (path: string) => {
-	if (path === "/") return pathname === "/";
-	return pathname?.startsWith(path);
-};
-
-const panelClass =
-	"rounded-[18px] overflow-hidden border border-[#B08D57]/30 " +
-	"bg-[linear-gradient(180deg,rgba(31,61,43,0.92),rgba(31,61,43,0.55))] " +
-	"shadow-[0_24px_70px_rgba(0,0,0,0.30)]";
-
-const innerBorder = (
-	<div className="pointer-events-none absolute inset-0 rounded-[18px] border border-[#F3EBDD]/10" />
-);
-
 // ============================================================================
 // MOCK DATA - Will be replaced with real data
 // ============================================================================
@@ -235,6 +219,21 @@ export default function PredictionMarketPage() {
 	const [isPlacingBet, setIsPlacingBet] = useState(false);
 	const [currentTime, setCurrentTime] = useState("");
 	const [currentDate, setCurrentDate] = useState("");
+	const pathname = usePathname();
+
+	const activeNav = (path: string) => {
+		if (path === "/") return pathname === "/";
+		return pathname?.startsWith(path);
+	};
+
+	const panelClass =
+		"rounded-[18px] overflow-hidden border border-[#B08D57]/30 " +
+		"bg-[linear-gradient(180deg,rgba(31,61,43,0.92),rgba(31,61,43,0.55))] " +
+		"shadow-[0_24px_70px_rgba(0,0,0,0.30)]";
+
+	const innerBorder = (
+		<div className="pointer-events-none absolute inset-0 rounded-[18px] border border-[#F3EBDD]/10" />
+	);
 
 	useEffect(() => {
 		const timer = setInterval(() => {
