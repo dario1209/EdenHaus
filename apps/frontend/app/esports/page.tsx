@@ -177,7 +177,7 @@ export default function EsportsPage() {
                                 </div>
 
                                 <div className="mt-1 text-[11px] tracking-[0.34em] uppercase text-[#D8CFC0]/50 group-hover:text-[#C2A14D]/80 transition-colors">
-                                    Esports • Quiet Confidence • Reliable Odds
+                                    Quiet Confidence • Reliable Odds
                                 </div>
                             </Link>
 
