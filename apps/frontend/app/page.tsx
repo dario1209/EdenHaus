@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useMemo, useState } from "react"
@@ -91,121 +92,15 @@ export default function Home() {
                             {/* Emblem + knock door */}
                             <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
                                 <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(10,14,12,0.45),rgba(10,14,12,0.20))] p-6 ring-1 ring-[#B08D57]/25">
-                                    <svg
-                                        width="220"
-                                        height="220"
-                                        viewBox="0 0 200 200"
-                                        className="drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)]"
+                                    <Image
+                                        src="/Eden_Haus_illustration.png"
+                                        alt="Eden Haus - In House Bets"
+                                        width={280}
+                                        height={280}
+                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300"
                                         onClick={handleKnock}
-                                        role="button"
-                                        aria-label="Knock on the door"
-                                    >
-                                        {/* frame */}
-                                        <rect
-                                            x="40"
-                                            y="30"
-                                            width="120"
-                                            height="150"
-                                            fill="none"
-                                            stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
-                                            strokeWidth="2.5"
-                                            className="transition-all duration-500"
-                                        />
-
-                                        {/* top panes: 3 tall (deco) */}
-                                        {[
-                                            [60, 45],
-                                            [92, 45],
-                                            [124, 45],
-                                        ].map(([x, y], i) => (
-                                            <rect
-                                                key={i}
-                                                x={x}
-                                                y={y}
-                                                width="16"
-                                                height="44"
-                                                rx="2"
-                                                fill="none"
-                                                stroke="#D8CFC0"
-                                                strokeWidth="1.8"
-                                                opacity="0.85"
-                                            />
-                                        ))}
-
-                                        {/* door */}
-                                        <rect
-                                            x="80"
-                                            y="118"
-                                            width="40"
-                                            height="57"
-                                            rx="2"
-                                            fill={isAuthenticated ? "#C2A14D" : "#4A2C1D"}
-                                            stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
-                                            strokeWidth="2"
-                                            className="cursor-pointer hover:brightness-110 transition-all duration-300"
-                                        />
-
-                                        {/* door arch */}
-                                        <path
-                                            d="M 80 118 Q 100 108 120 118"
-                                            fill="none"
-                                            stroke={isAuthenticated ? "#C2A14D" : "#D8CFC0"}
-                                            strokeWidth="2"
-                                        />
-
-                                        {/* keyhole */}
-                                        <path
-                                            d="M100 136
-                         c-4.5 0-8 3.3-8 7.6
-                         c0 3.2 1.9 6 4.8 7.1
-                         l-2.2 9.8
-                         h10.8
-                         l-2.2-9.8
-                         c2.9-1.1 4.8-3.9 4.8-7.1
-                         c0-4.3-3.5-7.6-8-7.6z"
-                                            fill="#0A0E0C"
-                                            opacity="0.95"
-                                        />
-
-                                        {/* knob */}
-                                        <circle
-                                            cx="112"
-                                            cy="150"
-                                            r="3"
-                                            fill={isAuthenticated ? "#F3EBDD" : "#C2A14D"}
-                                            className="cursor-pointer hover:scale-125 transition-transform"
-                                        />
-
-                                        {/* subtle corner brackets (deco touch) */}
-                                        <path
-                                            d="M 45 35 L 45 45 M 45 35 L 55 35"
-                                            stroke="#D8CFC0"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            opacity="0.65"
-                                        />
-                                        <path
-                                            d="M 155 35 L 155 45 M 155 35 L 145 35"
-                                            stroke="#D8CFC0"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            opacity="0.65"
-                                        />
-                                        <path
-                                            d="M 45 175 L 45 165 M 45 175 L 55 175"
-                                            stroke="#D8CFC0"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            opacity="0.65"
-                                        />
-                                        <path
-                                            d="M 155 175 L 155 165 M 155 175 L 145 175"
-                                            stroke="#D8CFC0"
-                                            strokeWidth="2"
-                                            strokeLinecap="round"
-                                            opacity="0.65"
-                                        />
-                                    </svg>
+                                        priority
+                                    />
 
                                     <div className="mt-5 flex justify-center gap-2">
                                         {[0, 1, 2].map((i) => (
