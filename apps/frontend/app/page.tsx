@@ -93,11 +93,12 @@ export default function Home() {
                             <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
                                 <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(10,14,12,0.45),rgba(10,14,12,0.20))] p-6 ring-1 ring-[#B08D57]/25">
                                     <Image
-                                        src="/Eden_Haus.png"
+                                        src="/Eden.rgba"
                                         alt="Eden Haus - In House Bets"
                                         width={280}
                                         height={280}
                                         className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300"
+                                        style={{ backgroundColor: 'transparent' }}
                                         onClick={handleKnock}
                                         priority
                                     />
