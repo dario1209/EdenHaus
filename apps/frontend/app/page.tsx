@@ -93,7 +93,7 @@ export default function Home() {
                             <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
                                 <div className="rounded-2xl bg-[linear-gradient(135deg,rgba(10,14,12,0.45),rgba(10,14,12,0.20))] p-6 ring-1 ring-[#B08D57]/25">
                                     <Image
-                                        src="/Eden.rgba"
+                                        src="/Eden.png"
                                         alt="Eden Haus - In House Bets"
                                         width={280}
                                         height={280}
