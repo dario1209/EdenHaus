@@ -83,21 +83,21 @@ export default function Home() {
                         ].join(" ")}
                     >
                         {/* Brass double border */}
-                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-8 md:p-10">
+                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-3 md:p-10">
                             <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/25" />
 
                             {/* Warm spotlight */}
                             <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(194,161,77,0.22),rgba(194,161,77,0.00)_70%)] blur-2xl" />
 
                             {/* Emblem + knock door */}
-                            <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
-                                <div className="rounded-2xl bg-[#FDFBD4] p-0 ring-1 ring-[#B08D57]/25">
+                            <div className="mx-auto flex w-full max-w-[320px] flex-col items-center">
+                                <div className="rounded-2xl bg-[#FDFBD4] p-1 ring-1 ring-[#B08D57]/25">
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - In House Bets"
-                                        width={393}
-                                        height={420}
-                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300"
+                                        width={340}
+                                        height={510}
+                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
                                         style={{ backgroundColor: 'transparent' }}
                                         onClick={handleKnock}
                                         priority
