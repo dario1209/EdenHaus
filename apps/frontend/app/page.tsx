@@ -91,12 +91,12 @@ export default function Home() {
 
                             {/* Emblem + knock door */}
                             <div className="mx-auto flex w-full max-w-[360px] flex-col items-center">
-                                <div className="rounded-2xl bg-[#FDFBD4] p-6 ring-1 ring-[#B08D57]/25">
+                                <div className="rounded-2xl bg-[#FDFBD4] p-3 ring-1 ring-[#B08D57]/25">
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - In House Bets"
-                                        width={240}
-                                        height={260}
+                                        width={320}
+                                        height={346}
                                         className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300"
                                         style={{ backgroundColor: 'transparent' }}
                                         onClick={handleKnock}
