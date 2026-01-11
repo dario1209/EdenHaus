@@ -95,8 +95,8 @@ export default function Home() {
                                     <Image
                                         src="/EdenEden.png"
                                         alt="Eden Haus - In House Bets"
-                                        width={280}
-                                        height={280}
+                                        width={300}
+                                        height={320}
                                         className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300"
                                         style={{ backgroundColor: 'transparent' }}
                                         onClick={handleKnock}
