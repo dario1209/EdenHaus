@@ -104,8 +104,9 @@ function formatOdds(n: number) {
     return n.toFixed(2)
 }
 
-function formatCurrency(n: number) {
-    return "$" + n.toLocaleString("en-US")
+function formatCurrency(n?: number | null) {
+    const safeValue = typeof n === "number" && Number.isFinite(n) ? n : 0
+    return "$" + safeValue.toLocaleString("en-US")
 }
 
 // ============================================================================
