@@ -5,6 +5,8 @@ from app.services.market_manager import MarketManager
 from app.services.redis import increment_rate_limit, set_rate_limit
 import uuid
 from datetime import datetime, timedelta
+import os
+from app.core.contracts import MARKET_MANAGER_ADDRESS
 
 router = APIRouter()
 market_mgr = MarketManager()
@@ -48,8 +50,9 @@ async def place_bet_quote(bet: BetRequest):
     market_mgr.update_exposure(bet.market_id, bet.side, bet.stake)
     
     # HTTP 402 Payment Required
+    payee_address = os.getenv("X402_PAYEE_ADDRESS", MARKET_MANAGER_ADDRESS)
     headers = {
-        "Payment-Required": f"crypto-cronos://{price:.6f}@sportsbook",
+        "Payment-Required": f"crypto-cronos://{payee_address}@{price:.6f}",
         "X-Quote-ID": quote_id,
         "Retry-After": "300"
     }

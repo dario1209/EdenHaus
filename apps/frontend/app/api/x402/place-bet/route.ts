@@ -1,50 +1,64 @@
-import { getWalletAddress } from '@/lib/cookies'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
-// Industry-standard Zod validation schema
 const PlaceBetSchema = z.object({
-    marketId: z.string().min(1, 'Market ID required'),
-    sport: z.enum(['football', 'basketball', 'tennis', 'esports', 'casino']),
+    marketId: z.string().min(1).optional(),
+    market_id: z.string().min(1).optional(),
+    side: z.string().min(1).optional(),
+    choice: z.string().min(1).optional(),
+    sport: z.string().optional(),
     stake: z.coerce.number().min(0.01, 'Minimum stake $0.01').max(100, 'Maximum stake $100'),
 })
 
 export async function POST(request: NextRequest) {
     try {
-        // Parse + validate request body
         const body = await request.json()
-        const { marketId, sport, stake } = PlaceBetSchema.parse(body)
+        const parsed = PlaceBetSchema.parse(body)
 
-        // Get authenticated wallet
-        const wallet = await getWalletAddress()
-        if (!wallet) {
+        const marketId = parsed.market_id ?? parsed.marketId
+        if (!marketId) {
             return NextResponse.json(
-                { error: 'Wallet not connected' },
-                { status: 401 }
+                { error: 'Market ID required' },
+                { status: 400 }
             )
         }
 
-        // TODO: Integrate with real blockchain/DB
-        const bet = {
-            id: `bet_${Date.now()}_${Math.random().toString(36).slice(2)}`,
-            marketId,
-            sport,
-            wallet,
-            stake,
-            status: 'pending' as const,
-            odds: 1.92, // Fetch from market data
-            timestamp: new Date().toISOString(),
-            chain: 'cronos',
-            txHash: null, // Set after blockchain confirmation
+        const side = (parsed.side ?? parsed.choice ?? 'home').toString()
+        const stake = parsed.stake
+
+        const apiBaseUrl =
+            process.env.API_BASE_URL ||
+            process.env.NEXT_PUBLIC_API_URL ||
+            'http://localhost:8000'
+
+        const upstreamResponse = await fetch(`${apiBaseUrl}/api/v1/x402/place-bet`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                market_id: marketId,
+                side,
+                stake,
+            }),
+        })
+
+        const responseBody = await upstreamResponse.text()
+        const headers = new Headers()
+        const contentType = upstreamResponse.headers.get('content-type')
+        if (contentType) {
+            headers.set('content-type', contentType)
         }
 
-        console.log('[BET-PLACED]', { betId: bet.id, wallet: wallet.slice(0, 10) + '...', stake })
+        const paymentRequired = upstreamResponse.headers.get('Payment-Required')
+        const quoteId = upstreamResponse.headers.get('X-Quote-ID')
+        const retryAfter = upstreamResponse.headers.get('Retry-After')
 
-        // TODO: Store in database + emit websocket event
-        return NextResponse.json({
-            success: true,
-            bet,
-            message: 'Bet placed successfully. Awaiting blockchain confirmation.',
+        if (paymentRequired) headers.set('Payment-Required', paymentRequired)
+        if (quoteId) headers.set('X-Quote-ID', quoteId)
+        if (retryAfter) headers.set('Retry-After', retryAfter)
+
+        return new NextResponse(responseBody, {
+            status: upstreamResponse.status,
+            headers,
         })
 
     } catch (error) {

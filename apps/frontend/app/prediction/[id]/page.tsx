@@ -17,6 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { toast } from "sonner";
 import { useAccount } from "wagmi";
+import { useX402Pay } from "@/lib/x402";
 
 // ============================================================================
 // TYPES
@@ -186,6 +187,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export default function PredictionMarketPage() {
 	const params = useParams();
 	const { isConnected } = useAccount();
+	const { pay, isPaying } = useX402Pay("/api/x402/place-bet");
 
 	// State
 	const [market] = useState<MarketInfo>(MARKET_DATA);
@@ -263,19 +265,36 @@ export default function PredictionMarketPage() {
 			return;
 		}
 
+		const stake = Number(betAmount);
+		if (!Number.isFinite(stake) || stake <= 0) {
+			toast.error("Please enter a valid amount");
+			return;
+		}
+
 		if (!isConnected) {
 			toast.error("Please connect your wallet first");
 			return;
 		}
 
 		setIsPlacingBet(true);
-		await new Promise((resolve) => setTimeout(resolve, 2000));
+		const marketId = String(params?.id ?? market.id);
 
-		toast.success(`Bet placed! ${selectedOutcome.toUpperCase()} for $${betAmount}`);
+		const result = await pay({
+			market_id: marketId,
+			side: selectedOutcome,
+			stake,
+		});
+
+		if (result.success) {
+			toast.success(`Bet placed! ${selectedOutcome.toUpperCase()} for $${betAmount}`);
+			setBetAmount("");
+			setSelectedOutcome(null);
+		} else {
+			toast.error(result.error || "Payment failed");
+		}
+
 		setIsPlacingBet(false);
-		setBetAmount("");
-		setSelectedOutcome(null);
-	}, [selectedOutcome, betAmount, isConnected]);
+	}, [selectedOutcome, betAmount, isConnected, params, market.id, pay]);
 
 	const formatDate = (dateStr: string) => {
 		const date = new Date(dateStr);
@@ -297,6 +316,7 @@ export default function PredictionMarketPage() {
 
 	const yesOdds = useMemo(() => 100 / Math.max(1, market.yesPercent), [market.yesPercent]);
 	const noOdds = useMemo(() => 100 / Math.max(1, market.noPercent), [market.noPercent]);
+	const isProcessing = isPlacingBet || isPaying;
 
 	return (
 		<div className="relative min-h-screen overflow-hidden">
@@ -700,9 +720,9 @@ export default function PredictionMarketPage() {
 									) : (
 										<button
 											onClick={handlePlaceBet}
-											disabled={!selectedOutcome || !betAmount || isPlacingBet}
+											disabled={!selectedOutcome || !betAmount || isProcessing}
 											className={
-												selectedOutcome && betAmount && !isPlacingBet
+												selectedOutcome && betAmount && !isProcessing
 													? selectedOutcome === "yes"
 														? "eh-action eh-action--yes"
 														: "eh-action eh-action--no"
@@ -710,8 +730,8 @@ export default function PredictionMarketPage() {
 											}
 											type="button"
 										>
-											{isPlacingBet
-												? "Placing bet..."
+											{isProcessing
+												? "Processing payment..."
 												: selectedOutcome
 													? `Buy ${selectedOutcome.toUpperCase()}`
 													: "Select outcome"}
