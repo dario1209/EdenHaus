@@ -67,7 +67,7 @@ const navItems: { name: string; path: Route }[] = [
 // ============================================================================
 
 const MARKET_DATA: MarketInfo = {
-	id: "Eden Haus-hackathon-win",
+	id: "eden-haus-hackathon",
 	question: "Will Eden Haus win the Cronos x402 Hackathon?",
 	description:
 		"Prediction market for the outcome of Eden Haus in the DoraHacks Cronos x402 hackathon competition.",
@@ -277,11 +277,11 @@ export default function PredictionMarketPage() {
 		}
 
 		setIsPlacingBet(true);
-		const marketId = String(params?.id ?? market.id);
+		const marketId = market.id;
 
 		const result = await pay({
 			market_id: marketId,
-			side: selectedOutcome,
+			side: selectedOutcome === "yes" ? "home" : "away",
 			stake,
 		});
 
