@@ -97,10 +97,10 @@ export default function Home() {
                                         alt="Eden Haus - In House Bets"
                                         width={250}
                                         height={375}
-                                    className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
-                                    style={{ backgroundColor: 'transparent' }}
-                                    onClick={handleKnock}
-                                    priority
+                                        className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
+                                        style={{ backgroundColor: 'transparent' }}
+                                        onClick={handleKnock}
+                                        priority
                                     />
 
                                     <div className="mt-3 flex justify-center gap-2">
@@ -147,7 +147,7 @@ shadow-[0_18px_55px_rgba(0,0,0,0.55)]
 transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]`}
                                     >
                                         <span className="absolute inset-0 rounded-full ring-1 ring-[#C2A14D]/15 group-hover:ring-[#C2A14D]/25" />
-                                        Slip Inside
+                                        Enter the House
                                     </button>
 
                                     <p className="text-[10px] italic text-[#D8CFC0]/45">{knockText}</p>
