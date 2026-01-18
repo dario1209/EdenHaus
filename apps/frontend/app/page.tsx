@@ -91,13 +91,13 @@ export default function Home() {
                                         width={250}
                                         height={375}
                                         className="rounded-xl drop-shadow-[0_18px_40px_rgba(0,0,0,0.55)] cursor-pointer hover:scale-105 transition-transform duration-300 mx-auto"
-                                        style={{ backgroundColor: 'transparent' }}
+                                        style={{ backgroundColor: 'transparent', display: 'block' }}
                                         onClick={handleKnock}
                                         priority
                                     />
 
                                     {/* Title inside white container */}
-                                    <div className="mt-3 text-center">
+                                    <div className="-mt-1 text-center">
                                         <h1 className="font-serif text-2xl md:text-3xl tracking-[0.10em] text-[#1F3D2B]">
                                             Eden Haus
                                         </h1>
