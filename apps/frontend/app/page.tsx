@@ -140,7 +140,7 @@ shadow-[0_18px_55px_rgba(0,0,0,0.55)]
 transition hover:border-[#C2A14D]/90 hover:shadow-[0_18px_75px_rgba(0,0,0,0.70)]`}
                                     >
                                         <span className="absolute inset-0 rounded-full ring-1 ring-[#C2A14D]/15 group-hover:ring-[#C2A14D]/25" />
-                                        Enter the House
+                                        Enter the Haus
                                     </button>
 
                                     <p className="text-[10px] italic text-[#D8CFC0]/45">{knockText}</p>
