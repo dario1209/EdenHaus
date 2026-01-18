@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 export default function Home() {
     const router = useRouter()
@@ -11,6 +11,29 @@ export default function Home() {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [doorShaking, setDoorShaking] = useState(false)
     const [smokeEffect, setSmokeEffect] = useState(false)
+    const contentRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        const updateScale = () => {
+            if (contentRef.current) {
+                const container = contentRef.current
+                const windowHeight = window.innerHeight
+                const windowWidth = window.innerWidth
+                const contentHeight = container.scrollHeight
+                const contentWidth = container.scrollWidth
+
+                const scaleY = (windowHeight - 32) / contentHeight
+                const scaleX = (windowWidth - 32) / contentWidth
+                const scale = Math.min(scaleY, scaleX, 1)
+
+                container.style.setProperty('--scale-factor', scale.toString())
+            }
+        }
+
+        updateScale()
+        window.addEventListener('resize', updateScale)
+        return () => window.removeEventListener('resize', updateScale)
+    }, [])
 
     const secretPattern = [1, 1, 1]
 
@@ -62,12 +85,12 @@ export default function Home() {
             {smokeEffect && <div className="absolute inset-0 z-50 pointer-events-none smoke" />}
 
             {/* Content */}
-            <div className="relative z-10 flex h-screen items-center justify-center p-0">
-                <div className="w-full h-full">
+            <div className="relative z-10 h-screen p-2 md:p-4" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div ref={contentRef} className="w-full max-w-[700px]" style={{ transform: 'scale(var(--scale-factor, 1))', transformOrigin: 'center' }}>
                     {/* Plaque */}
                     <div
                         className={[
-                            "h-full w-full rounded-none p-4 md:p-6",
+                            "rounded-[20px] p-4 md:p-6",
                             "backdrop-blur-md",
                             "shadow-[0_40px_120px_rgba(0,0,0,0.55)]",
                             "bg-[linear-gradient(135deg,rgba(10,14,12,0.55),rgba(10,14,12,0.22))]",
@@ -76,14 +99,14 @@ export default function Home() {
                         ].join(" ")}
                     >
                         {/* Brass double border */}
-                        <div className="relative h-full flex flex-col rounded-none border border-[#B08D57]/60 p-1 md:p-4">
-                            <div className="pointer-events-none absolute inset-[10px] rounded-none border border-[#C2A14D]/25" />
+                        <div className="relative rounded-2xl border border-[#B08D57]/60 p-1 md:p-4">
+                            <div className="pointer-events-none absolute inset-[10px] rounded-2xl border border-[#C2A14D]/25" />
 
                             {/* Warm spotlight */}
                             <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(194,161,77,0.22),rgba(194,161,77,0.00)_70%)] blur-2xl" />
 
                             {/* Emblem + knock door */}
-                            <div className="mx-auto flex w-full max-w-[400px] flex-col items-center justify-center flex-1">
+                            <div className="mx-auto flex w-full max-w-[400px] flex-col items-center">
                                 <div className="rounded-2xl bg-[#FDFBD4] pb-3 pt-1 px-1 ring-1 ring-[#B08D57]/25 inline-block w-full">
                                     <Image
                                         src="/EdenEden.png"
