@@ -59,7 +59,7 @@ export default function ResponsibleGamingPage() {
                                         First Principles
                                     </h2>
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        <li>Only wager what you can afford to lose—fully and without consequence.</li>
+                                        <li>Only wager what you can afford to lose fully and without consequence.</li>
                                         <li>Set limits before you start (time, stake, and loss), and keep them.</li>
                                         <li>Never chase losses; chasing turns discipline into damage.</li>
                                         <li>Don’t wager while stressed, intoxicated, or emotionally compromised.</li>
@@ -83,7 +83,7 @@ export default function ResponsibleGamingPage() {
                                         House Tools (Recommended)
                                     </h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        Use external guardrails even if you feel in control—limits protect you on the days you aren’t.
+                                        Use external guardrails even if you feel in control, limits protect you on the days you aren’t.
                                     </p>
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
                                         <li>Hard budget: a fixed weekly/monthly allocation.</li>
