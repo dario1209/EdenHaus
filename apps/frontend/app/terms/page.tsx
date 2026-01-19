@@ -56,7 +56,7 @@ export default function TermsPage() {
                                 <section>
                                     <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Preamble</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        The House is governed by three pillars: composure, discretion, and craft.
+                                        The Haus is governed by three pillars: composure, discretion, and craft.
                                     </p>
                                 </section>
 

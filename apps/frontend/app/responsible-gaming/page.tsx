@@ -39,7 +39,7 @@ export default function ResponsibleGamingPage() {
                         </h1>
 
                         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-[#D8CFC0]/80">
-                            The House respects restraint. If control slips, step back.
+                            The Haus respects restraint. If control slips, step back.
                         </p>
 
                         <div className="mx-auto mt-8 h-px w-52 bg-[#B08D57]/35" />
@@ -80,7 +80,7 @@ export default function ResponsibleGamingPage() {
 
                                 <section>
                                     <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">
-                                        House Tools (Recommended)
+                                        Haus Tools (Recommended)
                                     </h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
                                         Use external guardrails even if you feel in control, limits protect you on the days you aren’t.
