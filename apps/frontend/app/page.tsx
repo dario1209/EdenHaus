@@ -149,8 +149,7 @@ export default function Home() {
                                     <div className="mx-auto h-px w-32 bg-[#B08D57]/35" />
 
                                     <p className="mx-auto mt-3 max-w-md text-center text-xs leading-relaxed text-[#D8CFC0]/80">
-                                        A discreet room for those who read the game fast and wager with composure. Knock thrice, or slip in
-                                        quietly.
+                                        Automated Prediction Execution and Agentic Settlement
                                     </p>
                                 </div>
 
