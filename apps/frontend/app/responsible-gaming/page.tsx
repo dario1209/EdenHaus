@@ -31,7 +31,7 @@ export default function ResponsibleGamingPage() {
                     {/* Header */}
                     <div className="text-center">
                         <p className="text-[11px] tracking-[0.38em] uppercase text-[#B08D57]/85">
-                            Eden Haus • House Discipline
+                            Eden Haus • Members Only
                         </p>
 
                         <h1 className="mt-6 font-serif text-4xl md:text-5xl tracking-[0.10em] text-[#F3EBDD] drop-shadow-[0_10px_30px_rgba(0,0,0,0.55)]">
@@ -39,8 +39,7 @@ export default function ResponsibleGamingPage() {
                         </h1>
 
                         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-[#D8CFC0]/80">
-                            The House respects restraint. Wagering should remain entertainment—never a requirement, never a rescue.
-                            If control slips, step back.
+                            The House respects restraint. If control slips, step back.
                         </p>
 
                         <div className="mx-auto mt-8 h-px w-52 bg-[#B08D57]/35" />
@@ -99,12 +98,11 @@ export default function ResponsibleGamingPage() {
                                         Need help now?
                                     </h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        If you feel you’re losing control, reach out to a trusted friend or a local professional support
-                                        service in your region. The fastest path back to control is asking early.
+                                        If you feel you’re losing control, reach out to a trusted friend.
+                                        The fastest path back to control is asking early.
                                     </p>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/70">
-                                        If you’d like Eden Haus to add or link region-specific resources (e.g., Greece/UK/US), request it via
-                                        Contact.
+                                        For confidential support, consider contacting a professional helpline.
                                     </p>
                                 </section>
 

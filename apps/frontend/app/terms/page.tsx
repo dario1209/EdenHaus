@@ -38,8 +38,7 @@ export default function TermsPage() {
                         </h1>
 
                         <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-[#D8CFC0]/80">
-                            Eden Haus is a discreet room—part lodge, part laboratory—built for those who read the game fast and move
-                            with restraint. By stepping beyond the door, you consent to the rules below.
+                            Eden Haus is a members lodge. By stepping beyond the door, you consent to the rules below.
                         </p>
 
                         <div className="mx-auto mt-8 h-px w-48 bg-[#B08D57]/35" />
@@ -57,8 +56,7 @@ export default function TermsPage() {
                                 <section>
                                     <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Preamble</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        The House is governed by three pillars: composure, discretion, and craft. The wager is only the
-                                        surface; the discipline is the work.
+                                        The House is governed by three pillars: composure, discretion, and craft.
                                     </p>
                                 </section>
 
@@ -67,7 +65,7 @@ export default function TermsPage() {
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
                                         <li>Keep the identities, strategies, and conversations of other members private.</li>
                                         <li>Do not publish, stream, or broadcast private rooms, invitations, or internal material.</li>
-                                        <li>Respect boundaries—some doors are meant to stay closed.</li>
+                                        <li>Respect boundaries, some doors are meant to stay closed.</li>
                                     </ul>
                                 </section>
 
@@ -83,12 +81,10 @@ export default function TermsPage() {
                                 <section>
                                     <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Risk & Responsibility</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        Wagering is risk. Loss is possible. Nothing inside Eden Haus is financial advice. Each member is
-                                        solely responsible for their own decisions and outcomes.
+                                        Wagering is risk. Loss is possible. Nothing inside Eden Haus is financial advice.
                                     </p>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/70">
-                                        If you are not of legal age in your jurisdiction, or wagering is prohibited where you live, you must
-                                        not enter.
+                                        Legal gambling age and local regulations are your responsibility.
                                     </p>
                                 </section>
 
@@ -96,7 +92,7 @@ export default function TermsPage() {
                                     <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">Access & Removal</h2>
                                     <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[#D8CFC0]/80">
                                         <li>Entry is by invitation, and it can be revoked without notice.</li>
-                                        <li>The House may limit access, freeze features, or block accounts to protect members and integrity.</li>
+                                        <li>The Haus may limit access, freeze features, or block accounts to protect members and integrity.</li>
                                         <li>Attempts to bypass security or probe private systems will result in immediate removal.</li>
                                     </ul>
                                 </section>
@@ -104,8 +100,7 @@ export default function TermsPage() {
                                 <section>
                                     <h2 className="text-[12px] tracking-[0.44em] uppercase text-[#C2A14D]/90">The Mark</h2>
                                     <p className="mt-4 text-sm leading-relaxed text-[#D8CFC0]/80">
-                                        Symbols here are theatrical by design—an old tradition adapted to a new game. They are not claims of
-                                        affiliation with any real-world order.
+                                        Symbols and marks of Eden Haus are traditional. Use them with respect.
                                     </p>
                                 </section>
 
