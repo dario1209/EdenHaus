@@ -4,6 +4,14 @@
         "**/.env.*local"
     ],
     "globalEnv": [
+        "REDISHOST", 
+        "REDISPORT", 
+        "REDIS_URL", 
+        "REDISPASSWORD", 
+        "REDIS_PASSWORD", 
+        "REDIS_PUBLIC_URL", 
+        "CHAIN_ID", 
+        "USDT_TOKEN_ADDRESS",
         "PGDATA",
         "PGHOST",
         "PGPORT",
